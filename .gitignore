@@ -1,0 +1,80 @@
+# Vivado-generated files
+*.xpr
+*.xise
+*.ise
+*.runs/
+*.sim/
+*.ip_user_files/
+*.hw/
+*.ip_user_files/
+*.cache/
+*.jou
+*.log
+.Xil/
+vivado*.backup.jou
+vivado*.backup.log
+
+# Simulation files
+work/
+*.wdb
+*.vcd
+*.fsdb
+*.shm/
+*.diag/
+xsim.dir/
+xsim_*.pb
+xsim.pb
+*.pb
+xsim.covdb/
+sim/dfx_runtime.txt
+coverage_report/
+
+# ModelSim/QuestaSim
+*.mti
+*.rec
+*.qdb
+
+# VCS
+*.vpd
+*.v.d
+
+# Generated reports and documentation
+reports/
+*.html
+*.pdf
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IDE and editor files
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+*.lnk
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.o
+*.a
+*.so
+
+# Temporary files
+*.tmp
+*.temp
+temp/
