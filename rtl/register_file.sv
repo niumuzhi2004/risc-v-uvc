@@ -17,7 +17,7 @@ module register_file(
 
     // write logic
     always_ff @(negedge clk) begin
-        if (WE3)
+        if (WE3 && (A3 != 5'b0))
             regs[A3] <= WD3;
     end
 
