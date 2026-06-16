@@ -15,37 +15,43 @@ package processor_pkg;
 
     // result select mux
     typedef enum logic [1:0] { 
-        SEL_ALU_RESULT = 2'b00,
-        SEL_READ_DATA  = 2'b01,
-        SEL_PC_PLUS_4  = 2'b10,
-        SEL_COM_RESULT = 2'b11
+        RESULT_SEL_ALU_RESULT = 2'b00,
+        RESULT_SEL_READ_DATA  = 2'b01,
+        RESULT_SEL_PC_PLUS_4  = 2'b10,
+        RESULT_SEL_COM_RESULT = 2'b11
     } result_src_sel_t;
 
     // data memory access width select mux
     typedef enum logic [1:0] {
-        SEL_BYTE = 2'b00,
-        SEL_HALF = 2'b01,
-        SEL_WORD = 2'b10
+        MEM_SEL_BYTE = 2'b00,
+        MEM_SEL_HALF = 2'b01,
+        MEM_SEL_WORD = 2'b10
     } mem_width_sel_t;
 
     // ALU input #1 source select mux
     typedef enum logic [1:0] {
-        SEL_RD1  = 2'b00,
-        SEL_PC   = 2'b01,
-        SEL_ZERO = 2'b10
+        ALU_SEL_RD1  = 2'b00,
+        ALU_SEL_PC   = 2'b01,
+        ALU_SEL_ZERO = 2'b10
     } alu_src1_sel_t;
 
     // ALU input #2 source select mux
     typedef enum logic { 
-        SEL_RD2     = 1'b0,
-        SEL_IMM_EXT = 1'b1
+        ALU_SEL_RD2     = 1'b0,
+        ALU_SEL_IMM_EXT = 1'b1
     } alu_src2_sel_t;
 
     // Ex stage adder input #1 source select mux
     typedef enum logic { 
-        SEL_RD1E = 1'b0,
-        SEL_PCE  = 1'b1
+        ADDER_SEL_RD1 = 1'b0,
+        ADDER_SEL_PC  = 1'b1
     } adder_src_sel_t;
+
+    // Comparator input #2 source select mux
+    typedef enum logic {  
+        COMP_SEL_RD2     = 1'b0,
+        COMP_SEL_IMM_EXT = 1'b1
+    } comparator_src_sel_t;
 
     // funct3 code for load instructions
     typedef enum logic[2:0] {
@@ -61,7 +67,7 @@ package processor_pkg;
         FUNCT3_SB  = 3'b000,       // store byte
         FUNCT3_SH  = 3'b001,       // store half-word
         FUNCT3_SW  = 3'b010        // store word
-    } funct3_load_t;
+    } funct3_store_t;
 
     // funct3 code for I-type instructions
     typedef enum logic[2:0] {
@@ -87,6 +93,16 @@ package processor_pkg;
         FUNCT3_AND     = 3'b111
     } funct3_Rtype_t;
 
+    // funct3 code for B-type instructions
+    typedef enum logic [2:0] {  
+        FUNCT3_BEQ  = 3'b000,
+        FUNCT3_BNE  = 3'b001,
+        FUNCT3_BLT  = 3'b100,
+        FUNCT3_BGE  = 3'b101,
+        FUNCT3_BLTU = 3'b110,
+        FUNCT3_BGEU = 3'b111
+    } funct3_Btype_t;
+
     // ALU operation select
     typedef enum logic [2:0] {
         ALU_ADD = 3'b000,          // addition
@@ -98,6 +114,14 @@ package processor_pkg;
         ALU_SRL = 3'b110,          // shift right logical
         ALU_SRA = 3'b111           // shift right arithmetic
     } alu_op_t;
+
+    // comparator operation select
+    typedef enum logic [1:0] {  
+        COMP_EQ = 2'b00,            // equal to
+        COMP_NE = 2'b01,            // not equal to
+        COMP_LT = 2'b10,            // less than
+        COMP_GE = 2'b11             // greater than or equal to
+    } comp_op_t;
 
     // immediate encoding type
     typedef enum logic[2:0] {  

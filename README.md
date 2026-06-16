@@ -23,13 +23,16 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | `ResultSrc`  | 2 | Mux select for result: (1) ALU result, (2) read data from data memory, (3) `PC+4`, or (4) comparator result |
 | `MemWrite`   | 1 | Enable write to data memory |
 | `MemWidth`   | 2 | Data memory access width: byte/half-word/word |
-| `MemSign`    | 1 | Data signedness: signed/unsigned |
+| `MemSign`    | 1 | Memory data signedness: signed/unsigned |
 | `Jump`       | 1 | Jump instruction (`jal` or `jalr`)  |
 | `Branch`     | 1 | Branch instruction (`beq`, `bne`, `blt`, `bge`, `bltu`, or `bgeu`) |
 | `ALUControl` | 3 | ALU operation select (`ADD`, `SUB`, `AND`, `OR`, `XOR`, `SLL`, `SRL`, or `SRA`) |
 | `ALUSrc1`    | 2 | Mux select for ALU input #1: (1) RD1 from register file, (2) PC, or (3) zero |
 | `ALUSrc2`    | 1 | Mux select for ALU input #2: (1) RD2 from register file or (2) extended immediate |
 | `AdderESrc`    | 1 | Mux select for Ex stage adder input #1: (1) RD1 from register file or (2) PC |
+| `CompSrc`    | 1 | Mux select for comparator input #2: (1) RD2 from register file or (2) extended immediate |
+| `CompSign`    | 1 | Comparison signedness: signed/unsigned |
+| `CompOp`    | 2 | Comparator operation select (`EQ`, `NE`, `LT`, or `GE`) |
 | `ImmSrc`     | 3 | Specifies immediate encoding for I-, S-, B-, U-, and J-type instructions |
 | `Halt`     | 1 | Halts the processor in case of unrecognized op code |
 
