@@ -15,10 +15,13 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 
 
 ## Control Unit
+
 <p align="center">
     <img src="./.github/pipelined_control_unit.svg" width="50%"><br>
     <sup>Control Unit of RISC-V Pipelined Processor.</sup>
 </p>
+
+The control unit decodes the instruction based on (1) the `op` code, (2) the `funct3` field, and (3) the `funct7` field, generating the following control signals:
 
 | Control Signal | Width | Explanation |
 |----------------|-------|-------------|
@@ -38,3 +41,28 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | `ImmSrc`     | 3 | Specifies immediate encoding for I-, S-, B-, U-, and J-type instructions |
 | `Halt`     | 1 | Halts the processor in case of unrecognized op code |
 
+It is worth noting that input #2 to the comparator and input #2 to the ALU share the same control signal. Either that only one of them is used at a time, or they share the same source (`RD1E` or `ImmExtE`) for certain instructions (`SLT`, `SLTU`, `SLTI`, and `SLTIU`).
+
+
+## Register File
+
+<p align="center">
+    <img src="./.github/register_file.svg" width="60%"><br>
+    <sup>Register File of RISC-V Pipelined Processor.</sup>
+</p>
+
+The register file has 32 registers `x0`-`x31`, each 32 bits wide. It supports two read ports and one write port. Register `x0` is hardwired to zero and cannot be written to.
+
+| Port | Width | Explanation |
+|--------|-------|-------------|
+| `CLK` | 1 | Clock signal (inverted)|
+| `A1` | 5 | Read address for `RD1` |
+| `A2` | 5 | Read address for `RD2` |
+| `A3` | 5 | Write address for `WD3` |
+| `RD1` | 32 | Read data output port #1 |
+| `RD2` | 32 | Read data output port #2 |
+| `WE3` | 1 | Write enable for `WD3` |
+| `WD3` | 32 | Write data input port |
+| `dbg_reg_file` | 1024 | Debug output for all 32 registers (32 bits each) |
+
+The 5-bit addresses cover all 32 registers. Write operations occur on the falling edge of the clock when `WE3` is asserted. Read operations are combinational, providing the contents of the addressed registers on `RD1` and `RD2`. In addition, the registers are exposed as a debug output `dbg_reg_file` for easier verification and debugging.
