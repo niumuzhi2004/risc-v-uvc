@@ -47,12 +47,6 @@ package processor_pkg;
         ADDER_SEL_PC  = 1'b1
     } adder_src_sel_t;
 
-    // Comparator input #2 source select mux
-    typedef enum logic {  
-        COMP_SEL_RD2     = 1'b0,
-        COMP_SEL_IMM_EXT = 1'b1
-    } comparator_src_sel_t;
-
     // funct3 code for load instructions
     typedef enum logic[2:0] {
         FUNCT3_LB  = 3'b000,       // load byte

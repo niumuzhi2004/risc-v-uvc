@@ -15,7 +15,10 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 
 
 ## Control Unit
-![Control Unit of RISC-V Pipelined Processor](./.github/pipelined_control_unit.svg)
+<p align="center">
+    <img src="./.github/pipelined_control_unit.svg" width="50%"><br>
+    <sup>Control Unit of RISC-V Pipelined Processor.</sup>
+</p>
 
 | Control Signal | Width | Explanation |
 |----------------|-------|-------------|
@@ -30,7 +33,6 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | `ALUSrc1`    | 2 | Mux select for ALU input #1: (1) RD1 from register file, (2) PC, or (3) zero |
 | `ALUSrc2`    | 1 | Mux select for ALU input #2: (1) RD2 from register file or (2) extended immediate |
 | `AdderESrc`    | 1 | Mux select for Ex stage adder input #1: (1) RD1 from register file or (2) PC |
-| `CompSrc`    | 1 | Mux select for comparator input #2: (1) RD2 from register file or (2) extended immediate |
 | `CompSign`    | 1 | Comparison signedness: signed/unsigned |
 | `CompOp`    | 2 | Comparator operation select (`EQ`, `NE`, `LT`, or `GE`) |
 | `ImmSrc`     | 3 | Specifies immediate encoding for I-, S-, B-, U-, and J-type instructions |

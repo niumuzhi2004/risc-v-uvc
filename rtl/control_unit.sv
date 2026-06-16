@@ -16,7 +16,6 @@ module control_unit(
     output logic [1:0] ALUSrc1,
     output logic       ALUSrc2,
     output logic       AdderESrc,
-    output logic       CompSrc,
     output logic       CompSign,
     output logic [1:0] CompOp, 
     output logic [2:0] ImmSrc,
@@ -37,7 +36,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;
                 ALUSrc2    = ALU_SEL_IMM_EXT;
                 AdderESrc  = ADDER_SEL_RD1;     // don't care
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_I_TYPE;
@@ -66,19 +64,16 @@ module control_unit(
 
                 if (funct3 == FUNCT3_SLTI) begin
                     ResultSrc = RESULT_SEL_COM_RESULT;
-                    CompSrc   = COMP_SEL_IMM_EXT;
                     CompSign  = 1'b1;
                     CompOp    = COMP_LT;
                 end
                 else if (funct3 == FUNCT3_SLTIU) begin
                     ResultSrc = RESULT_SEL_COM_RESULT;
-                    CompSrc   = COMP_SEL_IMM_EXT;
                     CompSign  = 1'b0;
                     CompOp    = COMP_LT;
                 end
                 else begin
                     ResultSrc = RESULT_SEL_ALU_RESULT;
-                    CompSrc   = COMP_SEL_RD2;   // don't care
                     CompSign  = 1'b1;           // don't care
                     CompOp    = COMP_EQ;        // don't care
                 end
@@ -108,7 +103,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_PC;
                 ALUSrc2    = ALU_SEL_IMM_EXT;
                 AdderESrc  = ADDER_SEL_RD1;     // don't care
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_U_TYPE;
@@ -126,7 +120,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;
                 ALUSrc2    = ALU_SEL_IMM_EXT;
                 AdderESrc  = ADDER_SEL_RD1;     // don't care
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_S_TYPE;
@@ -155,19 +148,16 @@ module control_unit(
 
                 if (funct3 == FUNCT3_SLT) begin
                     ResultSrc = RESULT_SEL_COM_RESULT;
-                    CompSrc   = COMP_SEL_RD2;
                     CompSign  = 1'b1;
                     CompOp    = COMP_LT;
                 end
                 else if (funct3 == FUNCT3_SLTU) begin
                     ResultSrc = RESULT_SEL_COM_RESULT;
-                    CompSrc   = COMP_SEL_RD2;
                     CompSign  = 1'b0;
                     CompOp    = COMP_LT;
                 end
                 else begin
                     ResultSrc = RESULT_SEL_ALU_RESULT;
-                    CompSrc   = COMP_SEL_RD2;   // don't care
                     CompSign  = 1'b1;           // don't care
                     CompOp    = COMP_EQ;        // don't care
                 end
@@ -197,7 +187,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_ZERO;
                 ALUSrc2    = ALU_SEL_IMM_EXT;
                 AdderESrc  = ADDER_SEL_RD1;     // don't care
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_U_TYPE;
@@ -216,7 +205,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;       // don't care
                 ALUSrc2    = ALU_SEL_RD2;       // don't care
                 AdderESrc  = ADDER_SEL_PC;
-                CompSrc    = COMP_SEL_RD2;
                 ImmSrc     = IMM_B_TYPE;
                 Halt       = 1'b0;
 
@@ -248,7 +236,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;       // don't care
                 ALUSrc2    = ALU_SEL_RD2;       // don't care
                 AdderESrc  = ADDER_SEL_RD1;
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_I_TYPE;
@@ -267,7 +254,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;       // don't care
                 ALUSrc2    = ALU_SEL_RD2;       // don't care
                 AdderESrc  = ADDER_SEL_PC;
-                CompSrc    = COMP_SEL_RD2;      // don't care
                 CompSign   = 1'b1;              // don't care
                 CompOp     = COMP_EQ;           // don't care
                 ImmSrc     = IMM_J_TYPE;
@@ -286,7 +272,6 @@ module control_unit(
                 ALUSrc1    = ALU_SEL_RD1;
                 ALUSrc2    = ALU_SEL_RD2;
                 AdderESrc  = ADDER_SEL_RD1;
-                CompSrc    = COMP_SEL_RD2;
                 CompSign   = 1'b1;
                 CompOp     = COMP_EQ;
                 ImmSrc     = IMM_I_TYPE;
