@@ -87,3 +87,21 @@ The arithmetic logic unit (ALU) performs various arithmetic and logical operatio
 | `101` | `SLL` | Shift Left Logical | $`\text{ALUResult} = \text{Src1} \ll \text{Src2}_{4:0}`$|
 | `110` | `SRL` | Shift Right Logical | $`\text{ALUResult} = \text{Src1} \gg \text{Src2}_{4:0}`$|
 | `111` | `SRA` | Shift Right Arithmetic | $`\text{ALUResult} = \text{Src1} \ggg \text{Src2}_{4:0}`$|
+
+
+## Comparator
+<p align="center">
+    <img src="./.github/comparator.svg" width="55%"><br>
+    <sup>Comparator of RISC-V Pipelined Processor.</sup>
+</p>
+
+The comparator performs comparisons for branch instructions and along with `SLT`, `SLTU`, `SLTI`, and `SLTIU`. It takes two 32-bit inputs and produces a 1-bit output indicating the result of the comparison. The comparison type is specified through the `CompOp` signal, and the signedness of the comparison is specified through `CompSign`. The following operations are supported:
+
+| CompOp | Operation | Description | Formula |
+|--------|-----------|-------------|---------|
+| `00` | `EQ` | Equal to | $`\text{CompResult} = (\text{Src1} == \text{Src2})`$ |
+| `01` | `NE` | Not equal to | $`\text{CompResult} = (\text{Src1} \neq \text{Src2})`$ |
+| `10` | `LT` | Less than | $`\text{CompResult} = (\text{Src1} < \text{Src2})`$ |
+| `11` | `GE` | Greater than or equal to | $`\text{CompResult} = (\text{Src1} \geq \text{Src2})`$ |
+
+When `CompSign` is asserted, the comparator treats both inputs as signed integers. Otherwise, both inputs are treated as unsigned integers. 
