@@ -105,3 +105,88 @@ The comparator performs comparisons for branch instructions and along with `SLT`
 | `11` | `GE` | Greater than or equal to | $`\text{CompResult} = (\text{Src1} \geq \text{Src2})`$ |
 
 When `CompSign` is asserted, the comparator treats both inputs as signed integers. Otherwise, both inputs are treated as unsigned integers. 
+
+
+## Extend Unit
+<p align="center">
+    <img src="./.github/extend_unit.svg" width="55%"><br>
+    <sup>Extend Unit of RISC-V Pipelined Processor.</sup>
+</p>
+
+The extend unit generates the extended immediate values based on the instruction type specified by the `ImmSrc` control signal. It takes the top 25 bits from the instruction as input and produces a 32-bit extended immediate value as output. First, the unit recovers the original immediate value based on the RISC-V 32-bit instruction formats:
+
+<table>
+  <thead>
+    <tr>
+      <th>Instruction Type</th>
+      <th>31:25</th>
+      <th>24:20</th>
+      <th>19:15</th>
+      <th>14:12</th>
+      <th>11:7</th>
+      <th>6:0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>R-type</td>
+      <td><code>funct7</code></td>
+      <td><code>rs2</code></td>
+      <td><code>rs1</code></td>
+      <td><code>funct3</code></td>
+      <td><code>rd</code></td>
+      <td><code>op</code></td>
+    </tr>
+    <tr>
+      <td>I-type</td>
+      <td colspan="2">imm<sub>11:0</sub></td>
+      <td><code>rs1</code></td>
+      <td><code>funct3</code></td>
+      <td><code>rd</code></td>
+      <td><code>op</code></td>
+    </tr>
+    <tr>
+      <td>S-type</td>
+      <td>imm<sub>11:5</sub></td>
+      <td><code>rs2</code></td>
+      <td><code>rs1</code></td>
+      <td><code>funct3</code></td>
+      <td>imm<sub>4:0</sub></td>
+      <td><code>op</code></td>
+    </tr>
+    <tr>
+      <td>B-type</td>
+      <td>imm<sub>12,10:5</sub></td>
+      <td><code>rs2</code></td>
+      <td><code>rs1</code></td>
+      <td><code>funct3</code></td>
+      <td>imm<sub>4:1,11</sub></td>
+      <td><code>op</code></td>
+    </tr>
+    <tr>
+      <td>U-type</td>
+      <td colspan="4">imm<sub>31:12</sub></td>
+      <td><code>rd</code></td>
+      <td><code>op</code></td>
+    </tr>
+    <tr>
+      <td>J-type</td>
+      <td colspan="4">imm<sub>20,10:1,11,19:12</sub></td>
+      <td><code>rd</code></td>
+      <td><code>op</code></td>
+    </tr>
+  </tbody>
+</table>
+
+
+Then, based on the instruction type, the extend unit generates the extended immediate value as follows:
+
+
+| ImmSrc | Instruction Type | Immediate Encoding |
+|--------|------------------|--------------------|
+| `000` | I-type | $`\text{ImmExt} = \text{SignExt}({\textbf{{imm}}_{11:0}})`$ |
+| `001` | S-type | $`\text{ImmExt} = \text{SignExt}({\textbf{{imm}}_{11:0}})`$ |
+| `010` | B-type | $`\text{ImmExt} = \text{SignExt}({\textbf{{imm}}_{12:1}, \text{1'b0}})`$ |
+| `011` | U-type | $`\text{ImmExt} = \{\textbf{{imm}}_{31:12}, \text{12'b0}\}`$ |
+| `100` | J-type | $`\text{ImmExt} = \text{SignExt}({\textbf{{imm}}_{20:1}, \text{1'b0}})`$ |
+> **Note:** R-type instructions have no immediate field, so `ImmSrc` is a don't-care for them.

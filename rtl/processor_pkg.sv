@@ -119,11 +119,11 @@ package processor_pkg;
 
     // immediate encoding type
     typedef enum logic[2:0] {  
-        IMM_J_TYPE = 3'b000,
-        IMM_I_TYPE = 3'b001,
-        IMM_S_TYPE = 3'b010,
-        IMM_B_TYPE = 3'b011,
-        IMM_U_TYPE = 3'b100
+        IMM_I_TYPE = 3'b000,
+        IMM_S_TYPE = 3'b001,
+        IMM_B_TYPE = 3'b010,
+        IMM_U_TYPE = 3'b011,
+        IMM_J_TYPE = 3'b100
     } imm_src_t;
 
 
