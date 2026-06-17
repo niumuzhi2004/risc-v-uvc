@@ -15,13 +15,13 @@ package processor_pkg;
 
     // result select mux
     typedef enum logic [1:0] { 
-        RESULT_SEL_ALU_RESULT = 2'b00,
-        RESULT_SEL_READ_DATA  = 2'b01,
-        RESULT_SEL_PC_PLUS_4  = 2'b10,
-        RESULT_SEL_COM_RESULT = 2'b11
+        RESULT_SEL_COM_RESULT = 2'b00,
+        RESULT_SEL_ALU_RESULT = 2'b01,
+        RESULT_SEL_READ_DATA  = 2'b10,
+        RESULT_SEL_PC_PLUS_4  = 2'b11,
     } result_src_sel_t;
 
-    // data memory access width select mux
+    // data memory access width select
     typedef enum logic [1:0] {
         MEM_SEL_BYTE = 2'b00,
         MEM_SEL_HALF = 2'b01,
