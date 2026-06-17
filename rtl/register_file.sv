@@ -10,7 +10,7 @@ module register_file(
     output logic [31:0] RD1,
     output logic [31:0] RD2,
 
-    output logic [31:0] dbg_reg_file [32]
+    output logic [31:0] DebugRegFile [32]
 );
 
     logic [31:0] regs [32];
@@ -25,7 +25,7 @@ module register_file(
     always_comb begin
         RD1 = (A1 == 5'b0) ? 32'b0 : regs[A1];
         RD2 = (A2 == 5'b0) ? 32'b0 : regs[A2];
-        dbg_reg_file = regs;    // debug port wired to registers
+        DebugRegFile = regs;    // debug port wired to registers
     end
     
 endmodule
