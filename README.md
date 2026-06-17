@@ -63,6 +63,27 @@ The register file has 32 registers `x0`-`x31`, each 32 bits wide. It supports tw
 | `RD2` | 32 | Read data output port #2 |
 | `WE3` | 1 | Write enable for `WD3` |
 | `WD3` | 32 | Write data input port |
-| `dbg_reg_file` | 1024 | Debug output for all 32 registers (32 bits each) |
+| `DebugRegFile` | 1024 | Debug output for all 32 registers (32 bits each) |
 
-The 5-bit addresses cover all 32 registers. Write operations occur on the falling edge of the clock when `WE3` is asserted. Read operations are combinational, providing the contents of the addressed registers on `RD1` and `RD2`. In addition, the registers are exposed as a debug output `dbg_reg_file` for easier verification and debugging.
+The 5-bit addresses cover all 32 registers. Write operations occur on the falling edge of the clock when `WE3` is asserted. Read operations are combinational, providing the contents of the addressed registers on `RD1` and `RD2`. In addition, the registers are exposed as a debug output `DebugRegFile` for easier verification and debugging.
+
+
+## ALU
+
+<p align="center">
+    <img src="./.github/alu.svg" width="50%"><br>
+    <sup>ALU of RISC-V Pipelined Processor.</sup>
+</p>
+
+The arithmetic logic unit (ALU) performs various arithmetic and logical operations based on the `ALUControl` signal. It takes two 32-bit inputs and produces a 32-bit output. The following operations are supported:
+
+| ALUControl | Operation | Description | Formula |
+|------------|-----------|-------------|---------|
+| `000` | `ADD` | Addition | $\text{ALUResult} = \text{Src1} + \text{Src2}$ |
+| `001` | `SUB` | Subtraction | $\text{ALUResult} = \text{Src1} - \text{Src2}$ |
+| `010` | `AND`  | Bitwise AND | $\text{ALUResult} = \text{Src1} \; \& \; \text{Src2}$ |
+| `011` | `OR`   | Bitwise OR | $\text{ALUResult} = \text{Src1} \; \vert \; \text{Src2}$ |
+| `100` | `XOR` | Bitwise XOR | $\text{ALUResult} = \text{Src1} \oplus \text{Src2}$ |
+| `101` | `SLL` | Shift Left Logical | $\text{ALUResult} = \text{Src1} \ll \text{Src2}_{4:0}$|
+| `110` | `SRL` | Shift Right Logical | $\text{ALUResult} = \text{Src1} \gg \text{Src2}_{4:0}$|
+| `111` | `SRA` | Shift Right Arithmetic | $\text{ALUResult} = \text{Src1} \ggg \text{Src2}_{4:0}$|
