@@ -71,7 +71,7 @@ The 5-bit addresses cover all 32 registers. Write operations occur on the fallin
 ## ALU
 
 <p align="center">
-    <img src="./.github/alu.svg" width="50%"><br>
+    <img src="./.github/ALU.svg" width="50%"><br>
     <sup>ALU of RISC-V Pipelined Processor.</sup>
 </p>
 
@@ -79,11 +79,11 @@ The arithmetic logic unit (ALU) performs various arithmetic and logical operatio
 
 | ALUControl | Operation | Description | Formula |
 |------------|-----------|-------------|---------|
-| `000` | `ADD` | Addition | $\text{ALUResult} = \text{Src1} + \text{Src2}$ |
-| `001` | `SUB` | Subtraction | $\text{ALUResult} = \text{Src1} - \text{Src2}$ |
-| `010` | `AND`  | Bitwise AND | $\text{ALUResult} = \text{Src1} \; \& \; \text{Src2}$ |
-| `011` | `OR`   | Bitwise OR | $\text{ALUResult} = \text{Src1} \; \vert \; \text{Src2}$ |
-| `100` | `XOR` | Bitwise XOR | $\text{ALUResult} = \text{Src1} \oplus \text{Src2}$ |
-| `101` | `SLL` | Shift Left Logical | $\text{ALUResult} = \text{Src1} \ll \text{Src2}_{4:0}$|
-| `110` | `SRL` | Shift Right Logical | $\text{ALUResult} = \text{Src1} \gg \text{Src2}_{4:0}$|
-| `111` | `SRA` | Shift Right Arithmetic | $\text{ALUResult} = \text{Src1} \ggg \text{Src2}_{4:0}$|
+| `000` | `ADD` | Addition | $`\text{ALUResult} = \text{Src1} + \text{Src2}`$ |
+| `001` | `SUB` | Subtraction | $`\text{ALUResult} = \text{Src1} - \text{Src2}`$ |
+| `010` | `AND`  | Bitwise AND | $`\text{ALUResult} = \text{Src1} \; \& \; \text{Src2}`$ |
+| `011` | `OR`   | Bitwise OR | $`\text{ALUResult} = \text{Src1} \; \vert \; \text{Src2}`$ |
+| `100` | `XOR` | Bitwise XOR | $`\text{ALUResult} = \text{Src1} \oplus \text{Src2}`$ |
+| `101` | `SLL` | Shift Left Logical | $`\text{ALUResult} = \text{Src1} \ll \text{Src2}_{4:0}`$|
+| `110` | `SRL` | Shift Right Logical | $`\text{ALUResult} = \text{Src1} \gg \text{Src2}_{4:0}`$|
+| `111` | `SRA` | Shift Right Arithmetic | $`\text{ALUResult} = \text{Src1} \ggg \text{Src2}_{4:0}`$|
