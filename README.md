@@ -14,7 +14,7 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | Debug status flags | `Halt`, `DebugRegFiles` (32 register `x0`-`x31` exposed) |
 
 <p align="center">
-    <img src="./.github/pipelined_cpu.svg" width="100%"><br>
+    <img src="./.github/pipelined_cpu.svg?v=1" width="100%"><br>
     <sup>Pipelined Processor with Control and Full Hazard Handling.</sup>
 </p>
 
