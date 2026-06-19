@@ -204,3 +204,10 @@ The hazard unit detects data and control hazards in the pipeline and generates t
 | Read-after-write (RAW) data hazard | I-, U-, R-, and J-type instructions | Forwarding from `MEM`/`WB` stages to `EX` stage |
 | Load data hazard | Load instructions | Stall the `IF` and `ID` stages for one cycle |
 | Control hazard | Branch and jump instructions | Assume path not taken; if the branch is taken or jump is taken, flush the instructions in `IF` and `ID` stages |
+
+
+## Datapath
+<p align="center">
+    <img src="./.github/pipelined_cpu.svg" width="100%"><br>
+    <sup>Pipelined Processor with Control and Full Hazard Handling.</sup>
+</p>

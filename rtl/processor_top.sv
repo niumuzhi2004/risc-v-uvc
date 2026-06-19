@@ -16,7 +16,7 @@ module processor #(
     input  logic [31:0] mem_rd_data,
 
     // register file debug port
-    output logic [31:0] dbg_reg_file [32],
+    output logic [31:0] DebugRegFile [32],
     output logic        halt
 )
 
