@@ -126,5 +126,11 @@ package processor_pkg;
         IMM_J_TYPE = 3'b100
     } imm_src_t;
 
+    // hazard unit ForwardAE/ForwardBE mux select
+    typedef enum logic[1:0] {  
+        FORWARD_SEL_RDE     = 2'b00,
+        FORWARD_SEL_RESULTW = 2'b01,
+        FORWARD_SEL_RESULTM = 2'b10
+    } forward_e_t;
 
 endpackage

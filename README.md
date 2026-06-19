@@ -17,7 +17,7 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 ## Control Unit
 
 <p align="center">
-    <img src="./.github/pipelined_control_unit.svg" width="50%"><br>
+    <img src="./.github/control_unit.svg" width="50%"><br>
     <sup>Control Unit of RISC-V Pipelined Processor.</sup>
 </p>
 
@@ -178,7 +178,6 @@ The extend unit generates the extended immediate values based on the instruction
   </tbody>
 </table>
 
-
 Then, based on the instruction type, the extend unit generates the extended immediate value as follows:
 
 
@@ -190,3 +189,18 @@ Then, based on the instruction type, the extend unit generates the extended imme
 | `011` | U-type | $`\text{ImmExt} = \{\textbf{{imm}}_{31:12}, \text{12'b0}\}`$ |
 | `100` | J-type | $`\text{ImmExt} = \text{SignExt}({\textbf{{imm}}_{20:1}, \text{1'b0}})`$ |
 > **Note:** R-type instructions have no immediate field, so `ImmSrc` is a don't-care for them.
+
+
+## Hazard Unit
+<p align="center">
+    <img src="./.github/hazard_unit.svg" width="55%"><br>
+    <sup>Hazard Unit of RISC-V Pipelined Processor.</sup>
+</p>
+
+The hazard unit detects data and control hazards in the pipeline and generates the appropriate forwarding, stall, and flush signals to ensure correct execution of instructions. The following types of hazards are handled:
+
+| Hazard Type | Applicable Instructions | Handling |
+|-------------|-------------------------|----------|
+| Read-after-write (RAW) data hazard | I-, U-, R-, and J-type instructions | Forwarding from `MEM`/`WB` stages to `EX` stage |
+| Load data hazard | Load instructions | Stall the `IF` and `ID` stages for one cycle |
+| Control hazard | Branch and jump instructions | Assume path not taken; if the branch is taken or jump is taken, flush the instructions in `IF` and `ID` stages |
