@@ -58,7 +58,7 @@ module control_unit(
                 Branch    = 1'b0;
                 ALUSrc1   = ALU_SEL_RD1;
                 ALUSrc2   = ALU_SEL_IMM_EXT;
-                AdderESrc = ALU_SEL_RD1E;       // don't care
+                AdderESrc = ADDER_SEL_RD1;      // don't care
                 ImmSrc    = IMM_I_TYPE;
                 Halt      = 1'b0;
 
@@ -203,7 +203,7 @@ module control_unit(
                 Branch     = 1'b1;
                 ALUControl = ALU_ADD;           // don't care
                 ALUSrc1    = ALU_SEL_RD1;       // don't care
-                ALUSrc2    = ALU_SEL_RD2;       // don't care
+                ALUSrc2    = ALU_SEL_RD2;
                 AdderESrc  = ADDER_SEL_PC;
                 ImmSrc     = IMM_B_TYPE;
                 Halt       = 1'b0;

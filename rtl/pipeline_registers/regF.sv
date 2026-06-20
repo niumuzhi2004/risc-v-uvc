@@ -1,4 +1,6 @@
-module regF(
+module regF #(
+    parameter PC_RESET
+) (
     input logic clk,
     input logic en,
     input logic rst_n,
@@ -9,7 +11,7 @@ module regF(
 
     always_ff @(posedge clk) begin
         if (~rst_n) begin
-            PCF <= 32'b0;
+            PCF <= PC_RESET;
         end 
         else if (en) begin
             PCF <= PCF_p;

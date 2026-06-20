@@ -41,7 +41,7 @@ package processor_pkg;
         ALU_SEL_IMM_EXT = 1'b1
     } alu_src2_sel_t;
 
-    // Ex stage adder input #1 source select mux
+    // PC target adder input #1 source select mux
     typedef enum logic { 
         ADDER_SEL_RD1 = 1'b0,
         ADDER_SEL_PC  = 1'b1
