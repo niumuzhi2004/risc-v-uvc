@@ -6,7 +6,7 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 ## DUT Specification
 | Parameter | Value |
 |-----------|-------|
-| Pipeline Depth | 5-stage (fetch `IF`, decode `ID`, execute `EX`, memory `MEM`, and writeback `WB`) |
+| Pipeline Depth | 5-stage (fetch, decode, execute, memory, and writeback) |
 | Hazard Handling | Full forwarding + stall on load-use hazards |
 | Instruction Set Architecture (ISA) | RV32I subset (excluding `FENCE`, `ECALL`, and `EBREAK`) |
 | Memory | Synchronous SRAMs in RTL ||
@@ -209,3 +209,31 @@ The hazard unit detects data and control hazards in the pipeline and generates t
 | Read-after-write (RAW) data hazard | I-, U-, R-, and J-type instructions | Forwarding from `MEM`/`WB` stages to `EX` stage |
 | Load data hazard | Load instructions | Stall the `IF` and `ID` stages for one cycle |
 | Control hazard | Branch and jump instructions | Assume path not taken; if the branch is taken or jump is taken, flush the instructions in `IF` and `ID` stages |
+
+
+## Data Memory Interface
+
+The actual data memory is not implemented in the RTL. Instead, the processor interfaces with a synchronous SRAM module that mimics the behavior of a real memory. The SRAM has the following interface, which is slightly different than the data memory interface drawn in the block diagram:
+
+| Port | Width | Explanation |
+|------|-------|-------------|
+|`clk` | 1 | Clock signal |
+|`mem_addr` | 32 | Memory address |
+|`mem_wr_data` | 32 | Write data |
+|`mem_we` | 4 | Byte enable for write (each bit represent one byte in a word) |
+|`mem_rd_data` | 32 | Read data |
+|`mem_re` | 1 | Read enable |
+
+Signal `mem_addr` is wired to `ALUResultM`, and `mem_wr_data` is wired to `WriteDataM`. `mem_re` is asserted when `ResultSrcM` selects read memory data. `mem_we` is determined from `MemWidthM` and the last two bits of `mem_addr` for alignment:
+
+|`MemWidthM` | `ALUResultM[1:0]` | `mem_we` |
+|------------|-------------------|----------|
+| WORD | `00` | `4'b1111` |
+| HALF | `00` | `4'b0011` |
+| HALF | `10` | `4'b1100` |
+| BYTE | `00` | `4'b0001` |
+| BYTE | `01` | `4'b0010` |
+| BYTE | `10` | `4'b0100` |
+| BYTE | `11` | `4'b1000` |
+
+Similarly, the appropriate bits in `mem_rd_data` is extracted based on `MemWidthM` and the last two bits of `mem_addr`, and then sign-extended or zero-extended based on `MemSignM` to produce the final read data `ReadDataM`.
