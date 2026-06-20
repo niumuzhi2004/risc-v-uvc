@@ -82,320 +82,321 @@ The RISC-V pipelined processor is a 5-stage pipeline architecture that implement
 
 ### 1.2 Supported RV32I Instructions
 
-<table id="riscv-instructions">
-  <thead>
-    <tr>
-      <th>op</th>
-      <th>funct3</th>
-      <th>Type</th>
-      <th>Instruction</th>
-      <th>Description</th>
-      <th>Operation</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>0000011 (3)</td>
-      <td>000</td>
-      <td>I</td>
-      <td><code>lb rd, imm(rs1)</code></td>
-      <td>load byte</td>
-      <td>rd = SignExt([Address]<sub>7:0</sub>)</td>
-    </tr>
-    <tr>
-      <td>0000011 (3)</td>
-      <td>001</td>
-      <td>I</td>
-      <td><code>lh rd, imm(rs1)</code></td>
-      <td>load half</td>
-      <td>rd = SignExt([Address]<sub>15:0</sub>)</td>
-    </tr>
-    <tr>
-      <td>0000011 (3)</td>
-      <td>010</td>
-      <td>I</td>
-      <td><code>lw rd, imm(rs1)</code></td>
-      <td>load word</td>
-      <td>rd = [Address]<sub>31:0</sub></td>
-    </tr>
-    <tr>
-      <td>0000011 (3)</td>
-      <td>100</td>
-      <td>I</td>
-      <td><code>lbu rd, imm(rs1)</code></td>
-      <td>load byte unsigned</td>
-      <td>rd = ZeroExt([Address]<sub>7:0</sub>)</td>
-    </tr>
-    <tr>
-      <td>0000011 (3)</td>
-      <td>101</td>
-      <td>I</td>
-      <td><code>lhu rd, imm(rs1)</code></td>
-      <td>load half unsigned</td>
-      <td>rd = ZeroExt([Address]<sub>15:0</sub>)</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>000</td>
-      <td>I</td>
-      <td><code>addi rd, rs1, imm</code></td>
-      <td>add immediate</td>
-      <td>rd = rs1 + SignExt(imm)</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>001<sup>*</sup></td>
-      <td>I</td>
-      <td><code>slli rd, rs1, uimm</code></td>
-      <td>shift left logical immediate</td>
-      <td>rd = rs1 &lt;&lt; uimm</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>010</td>
-      <td>I</td>
-      <td><code>slti rd, rs1, imm</code></td>
-      <td>set less than immediate</td>
-      <td>rd = (rs1 &lt; SignExt(imm))</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>011</td>
-      <td>I</td>
-      <td><code>sltiu rd, rs1, imm</code></td>
-      <td>set less than imm. unsigned</td>
-      <td>rd = (rs1 &lt; SignExt(imm))</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>100</td>
-      <td>I</td>
-      <td><code>xori rd, rs1, imm</code></td>
-      <td>xor immediate</td>
-      <td>rd = rs1 ^ SignExt(imm)</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>101<sup>*</sup></td>
-      <td>I</td>
-      <td><code>srli rd, rs1, uimm</code></td>
-      <td>shift right logical immediate</td>
-      <td>rd = rs1 &gt;&gt; uimm</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>101<sup>**</sup></td>
-      <td>I</td>
-      <td><code>srai rd, rs1, uimm</code></td>
-      <td>shift right arithmetic imm.</td>
-      <td>rd = rs1 &gt;&gt;&gt; uimm</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>110</td>
-      <td>I</td>
-      <td><code>ori rd, rs1, imm</code></td>
-      <td>or immediate</td>
-      <td>rd = rs1 | SignExt(imm)</td>
-    </tr>
-    <tr>
-      <td>0010011 (19)</td>
-      <td>111</td>
-      <td>I</td>
-      <td><code>andi rd, rs1, imm</code></td>
-      <td>and immediate</td>
-      <td>rd = rs1 &amp; SignExt(imm)</td>
-    </tr>
-    <tr>
-      <td>0010111 (23)</td>
-      <td>-</td>
-      <td>U</td>
-      <td><code>auipc rd, upimm</code></td>
-      <td>add upper immediate to PC</td>
-      <td>rd = {upimm, 12'b0} + PC</td>
-    </tr>
-    <tr>
-      <td>0100011 (35)</td>
-      <td>000</td>
-      <td>S</td>
-      <td><code>sb rs2, imm(rs1)</code></td>
-      <td>store byte</td>
-      <td>[Address]<sub>7:0</sub> = rs2<sub>7:0</sub></td>
-    </tr>
-    <tr>
-      <td>0100011 (35)</td>
-      <td>001</td>
-      <td>S</td>
-      <td><code>sh rs2, imm(rs1)</code></td>
-      <td>store half</td>
-      <td>[Address]<sub>15:0</sub> = rs2<sub>15:0</sub></td>
-    </tr>
-    <tr>
-      <td>0100011 (35)</td>
-      <td>010</td>
-      <td>S</td>
-      <td><code>sw rs2, imm(rs1)</code></td>
-      <td>store word</td>
-      <td>[Address]<sub>31:0</sub> = rs2</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>000<sup>*</sup></td>
-      <td>R</td>
-      <td><code>add rd, rs1, rs2</code></td>
-      <td>add</td>
-      <td>rd = rs1 + rs2</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>000<sup>**</sup></td>
-      <td>R</td>
-      <td><code>sub rd, rs1, rs2</code></td>
-      <td>sub</td>
-      <td>rd = rs1 - rs2</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>001<sup>*</sup></td>
-      <td>R</td>
-      <td><code>sll rd, rs1, rs2</code></td>
-      <td>shift left logical</td>
-      <td>rd = rs1 &lt;&lt; rs2<sub>4:0</sub></td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>010<sup>*</sup></td>
-      <td>R</td>
-      <td><code>slt rd, rs1, rs2</code></td>
-      <td>set less than</td>
-      <td>rd = (rs1 &lt; rs2)</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>011<sup>*</sup></td>
-      <td>R</td>
-      <td><code>sltu rd, rs1, rs2</code></td>
-      <td>set less than unsigned</td>
-      <td>rd = (rs1 &lt; rs2)</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>100<sup>*</sup></td>
-      <td>R</td>
-      <td><code>xor rd, rs1, rs2</code></td>
-      <td>xor</td>
-      <td>rd = rs1 ^ rs2</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>101<sup>*</sup></td>
-      <td>R</td>
-      <td><code>srl rd, rs1, rs2</code></td>
-      <td>shift right logical</td>
-      <td>rd = rs1 &gt;&gt; rs2<sub>4:0</sub></td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>101<sup>**</sup></td>
-      <td>R</td>
-      <td><code>sra rd, rs1, rs2</code></td>
-      <td>shift right arithmetic</td>
-      <td>rd = rs1 &gt;&gt;&gt; rs2<sub>4:0</sub></td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>110<sup>*</sup></td>
-      <td>R</td>
-      <td><code>or rd, rs1, rs2</code></td>
-      <td>or</td>
-      <td>rd = rs1 | rs2</td>
-    </tr>
-    <tr>
-      <td>0110011 (51)</td>
-      <td>111<sup>*</sup></td>
-      <td>R</td>
-      <td><code>and rd, rs1, rs2</code></td>
-      <td>and</td>
-      <td>rd = rs1 &amp; rs2</td>
-    </tr>
-    <tr>
-      <td>0110111 (55)</td>
-      <td>-</td>
-      <td>U</td>
-      <td><code>lui rd, upimm</code></td>
-      <td>load upper immediate</td>
-      <td>rd = {upimm, 12'b0}</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>000</td>
-      <td>B</td>
-      <td><code>beq rs1, rs2, label</code></td>
-      <td>branch if =</td>
-      <td>if (rs1 == rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>001</td>
-      <td>B</td>
-      <td><code>bne rs1, rs2, label</code></td>
-      <td>branch if &ne;</td>
-      <td>if (rs1 &ne; rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>100</td>
-      <td>B</td>
-      <td><code>blt rs1, rs2, label</code></td>
-      <td>branch if &lt;</td>
-      <td>if (rs1 &lt; rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>101</td>
-      <td>B</td>
-      <td><code>bge rs1, rs2, label</code></td>
-      <td>branch if &ge;</td>
-      <td>if (rs1 &ge; rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>110</td>
-      <td>B</td>
-      <td><code>bltu rs1, rs2, label</code></td>
-      <td>branch if &lt; unsigned</td>
-      <td>if (rs1 &lt; rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100011 (99)</td>
-      <td>111</td>
-      <td>B</td>
-      <td><code>bgeu rs1, rs2, label</code></td>
-      <td>branch if &ge; unsigned</td>
-      <td>if (rs1 &ge; rs2) PC = BTA</td>
-    </tr>
-    <tr>
-      <td>1100111 (103)</td>
-      <td>000</td>
-      <td>I</td>
-      <td><code>jalr rd, rs1, imm</code></td>
-      <td>jump and link register</td>
-      <td>PC = rs1 + SignExt(imm), rd = PC + 4</td>
-    </tr>
-    <tr>
-      <td>1101111 (111)</td>
-      <td>-</td>
-      <td>J</td>
-      <td><code>jal rd, label</code></td>
-      <td>jump and link</td>
-      <td>PC = JTA, rd = PC + 4</td>
-    </tr>
-  </tbody>
-  <caption style="caption-side: bottom; text-align: left; padding-top: 15px; font-size: 0.9em; line-height: 1.5;">
-    <sup>*</sup> Implies a <code>funct7</code> value of <code>0000000</code><br>
-    <sup>**</sup> Implies a <code>funct7</code> value of <code>0100000</code>
-  </caption>
-</table>
+<div style="overflow-x: auto; white-space: nowrap;">
+  <table id="riscv-instructions" style="width: 100%; min-width: 600px;">
+    <thead>
+      <tr>
+        <th>op</th>
+        <th>funct3</th>
+        <th>Type</th>
+        <th>Instruction</th>
+        <th>Description</th>
+        <th>Operation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3</td>
+        <td>000</td>
+        <td>I</td>
+        <td><code>lb rd, imm(rs1)</code></td>
+        <td>load byte</td>
+        <td>rd = SignExt([rs1 + SignExt(imm<sub>11:0</sub>)]<sub>7:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>001</td>
+        <td>I</td>
+        <td><code>lh rd, imm(rs1)</code></td>
+        <td>load half</td>
+        <td>rd = SignExt([rs1 + SignExt(imm<sub>11:0</sub>)]<sub>15:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>010</td>
+        <td>I</td>
+        <td><code>lw rd, imm(rs1)</code></td>
+        <td>load word</td>
+        <td>rd = [rs1 + SignExt(imm<sub>11:0</sub>)]<sub>31:0</sub></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>100</td>
+        <td>I</td>
+        <td><code>lbu rd, imm(rs1)</code></td>
+        <td>load byte unsigned</td>
+        <td>rd = ZeroExt([rs1 + SignExt(imm<sub>11:0</sub>)]<sub>7:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>101</td>
+        <td>I</td>
+        <td><code>lhu rd, imm(rs1)</code></td>
+        <td>load half unsigned</td>
+        <td>rd = ZeroExt([rs1 + SignExt(imm<sub>11:0</sub>)]<sub>15:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>000</td>
+        <td>I</td>
+        <td><code>addi rd, rs1, imm</code></td>
+        <td>add immediate</td>
+        <td>rd = rs1 + SignExt(imm<sub>11:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>001<sup>*</sup></td>
+        <td>I</td>
+        <td><code>slli rd, rs1, uimm</code></td>
+        <td>shift left logical immediate</td>
+        <td>rd = rs1 &lt;&lt; imm<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>010</td>
+        <td>I</td>
+        <td><code>slti rd, rs1, imm</code></td>
+        <td>set less than immediate</td>
+        <td>rd = (rs1 &lt; SignExt(imm<sub>11:0</sub>))</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>011</td>
+        <td>I</td>
+        <td><code>sltiu rd, rs1, imm</code></td>
+        <td>set less than imm. unsigned</td>
+        <td>rd = (rs1 &lt; SignExt(imm<sub>11:0</sub>))</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>100</td>
+        <td>I</td>
+        <td><code>xori rd, rs1, imm</code></td>
+        <td>xor immediate</td>
+        <td>rd = rs1 ^ SignExt(imm<sub>11:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>101<sup>*</sup></td>
+        <td>I</td>
+        <td><code>srli rd, rs1, uimm</code></td>
+        <td>shift right logical immediate</td>
+        <td>rd = rs1 &gt;&gt; imm<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>101<sup>**</sup></td>
+        <td>I</td>
+        <td><code>srai rd, rs1, uimm</code></td>
+        <td>shift right arithmetic imm.</td>
+        <td>rd = rs1 &gt;&gt;&gt; imm<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>110</td>
+        <td>I</td>
+        <td><code>ori rd, rs1, imm</code></td>
+        <td>or immediate</td>
+        <td>rd = rs1 | SignExt(imm<sub>11:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>111</td>
+        <td>I</td>
+        <td><code>andi rd, rs1, imm</code></td>
+        <td>and immediate</td>
+        <td>rd = rs1 &amp; SignExt(imm<sub>11:0</sub>)</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td>-</td>
+        <td>U</td>
+        <td><code>auipc rd, upimm</code></td>
+        <td>add upper immediate to PC</td>
+        <td>rd = {imm<sub>31:12</sub>, 12'b0} + PC</td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td>000</td>
+        <td>S</td>
+        <td><code>sb rs2, imm(rs1)</code></td>
+        <td>store byte</td>
+        <td>[rs1 + SignExt(imm<sub>11:0</sub>)]<sub>7:0</sub> = rs2<sub>7:0</sub></td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td>001</td>
+        <td>S</td>
+        <td><code>sh rs2, imm(rs1)</code></td>
+        <td>store half</td>
+        <td>[rs1 + SignExt(imm<sub>11:0</sub>)]<sub>15:0</sub> = rs2<sub>15:0</sub></td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td>010</td>
+        <td>S</td>
+        <td><code>sw rs2, imm(rs1)</code></td>
+        <td>store word</td>
+        <td>[rs1 + SignExt(imm<sub>11:0</sub>)]<sub>31:0</sub> = rs2</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>000<sup>*</sup></td>
+        <td>R</td>
+        <td><code>add rd, rs1, rs2</code></td>
+        <td>add</td>
+        <td>rd = rs1 + rs2</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>000<sup>**</sup></td>
+        <td>R</td>
+        <td><code>sub rd, rs1, rs2</code></td>
+        <td>sub</td>
+        <td>rd = rs1 - rs2</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>001<sup>*</sup></td>
+        <td>R</td>
+        <td><code>sll rd, rs1, rs2</code></td>
+        <td>shift left logical</td>
+        <td>rd = rs1 &lt;&lt; rs2<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>010<sup>*</sup></td>
+        <td>R</td>
+        <td><code>slt rd, rs1, rs2</code></td>
+        <td>set less than</td>
+        <td>rd = (rs1 &lt; rs2)</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>011<sup>*</sup></td>
+        <td>R</td>
+        <td><code>sltu rd, rs1, rs2</code></td>
+        <td>set less than unsigned</td>
+        <td>rd = (rs1 &lt; rs2)</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>100<sup>*</sup></td>
+        <td>R</td>
+        <td><code>xor rd, rs1, rs2</code></td>
+        <td>xor</td>
+        <td>rd = rs1 ^ rs2</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>101<sup>*</sup></td>
+        <td>R</td>
+        <td><code>srl rd, rs1, rs2</code></td>
+        <td>shift right logical</td>
+        <td>rd = rs1 &gt;&gt; rs2<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>101<sup>**</sup></td>
+        <td>R</td>
+        <td><code>sra rd, rs1, rs2</code></td>
+        <td>shift right arithmetic</td>
+        <td>rd = rs1 &gt;&gt;&gt; rs2<sub>4:0</sub></td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>110<sup>*</sup></td>
+        <td>R</td>
+        <td><code>or rd, rs1, rs2</code></td>
+        <td>or</td>
+        <td>rd = rs1 | rs2</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>111<sup>*</sup></td>
+        <td>R</td>
+        <td><code>and rd, rs1, rs2</code></td>
+        <td>and</td>
+        <td>rd = rs1 &amp; rs2</td>
+      </tr>
+      <tr>
+        <td>55</td>
+        <td>-</td>
+        <td>U</td>
+        <td><code>lui rd, upimm</code></td>
+        <td>load upper immediate</td>
+        <td>rd = {imm<sub>31:12</sub>, 12'b0}</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>000</td>
+        <td>B</td>
+        <td><code>beq rs1, rs2, label</code></td>
+        <td>branch if =</td>
+        <td>if (rs1 == rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>001</td>
+        <td>B</td>
+        <td><code>bne rs1, rs2, label</code></td>
+        <td>branch if &ne;</td>
+        <td>if (rs1 &ne; rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>100</td>
+        <td>B</td>
+        <td><code>blt rs1, rs2, label</code></td>
+        <td>branch if &lt;</td>
+        <td>if (rs1 &lt; rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>101</td>
+        <td>B</td>
+        <td><code>bge rs1, rs2, label</code></td>
+        <td>branch if &ge;</td>
+        <td>if (rs1 &ge; rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>110</td>
+        <td>B</td>
+        <td><code>bltu rs1, rs2, label</code></td>
+        <td>branch if &lt; unsigned</td>
+        <td>if (rs1 &lt; rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td>111</td>
+        <td>B</td>
+        <td><code>bgeu rs1, rs2, label</code></td>
+        <td>branch if &ge; unsigned</td>
+        <td>if (rs1 &ge; rs2)<br>PC += SignExt({imm<sub>12:1</sub>, 1'b0})</td>
+      </tr>
+      <tr>
+        <td>103</td>
+        <td>000</td>
+        <td>I</td>
+        <td><code>jalr rd, rs1, imm</code></td>
+        <td>jump and link register</td>
+        <td>PC = rs1 + SignExt(imm),<br>rd = PC + 4</td>
+      </tr>
+      <tr>
+        <td>111</td>
+        <td>-</td>
+        <td>J</td>
+        <td><code>jal rd, label</code></td>
+        <td>jump and link</td>
+        <td>PC = PC + SignExt({imm<sub>20:1</sub>, 1'b0}),<br>rd = PC + 4</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+> <sup>*</sup>  Implies a `funct7` value of `0000000` <br>
+> <sup>**</sup> Implies a `funct7` value of `0100000` <br>
 
 ## List of Submodules
 - [Control Unit](#21-control-unit)
