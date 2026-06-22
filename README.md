@@ -71,9 +71,17 @@ The test is translated into machine code and terminated by the `Halt` signal tri
 
 
 ## How to Run
+### Running the smoke test
+
 ```cmd
 cd sim
-vivado -mode batch -source run.tcl
+vivado -mode batch -source ./smoke/run.tcl
+```
+
+### Running the UVM testbench
+```cmd
+cd sim
+vivado -mode batch -source ./uvm/run.tcl
 ```
 
 > Coverage report generated at `sim/coverage_report/functionalCoverageReport/dashboard.html`
