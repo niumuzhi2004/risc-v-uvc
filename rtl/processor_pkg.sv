@@ -18,7 +18,7 @@ package processor_pkg;
         RESULT_SEL_COM_RESULT = 2'b00,
         RESULT_SEL_ALU_RESULT = 2'b01,
         RESULT_SEL_READ_DATA  = 2'b10,
-        RESULT_SEL_PC_PLUS_4  = 2'b11,
+        RESULT_SEL_PC_PLUS_4  = 2'b11
     } result_src_sel_t;
 
     // data memory access width select

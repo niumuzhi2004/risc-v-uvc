@@ -1,3 +1,4 @@
+addi  x3, x0, 0x100
 addi  x1, x0, 4
 lui   x2, 0xFFFFF
 srl   x2, x2, x1

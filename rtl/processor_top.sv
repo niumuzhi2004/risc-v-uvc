@@ -38,6 +38,7 @@ module processor #(
     logic [6:0] op;
     logic [2:0] funct3;
     logic funct7_5;
+    logic [31:0] InstrD;
 
     assign op       = InstrD[6:0];
     assign funct3   = InstrD[14:12];
@@ -47,7 +48,6 @@ module processor #(
     logic [1:0] ResultSrcD, MemWidthD, ALUSrc1D, CompOpD;
     logic [2:0] ALUControlD, ImmSrcD;
 
-    logic [31:0] InstrD;
     logic [4:0]  RdW;
     logic [31:0] ResultW;
     logic        RegWriteW;

@@ -1,3 +1,5 @@
+import processor_pkg::*;
+
 module extend(
     input  logic [24:0] Imm,
     input  logic [2:0]  ImmSrc,

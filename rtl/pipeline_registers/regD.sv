@@ -14,7 +14,7 @@ module regD(
 
     always_ff @(posedge clk) begin
         if (~rst_n | clr) begin
-            InstrD   <= 32'b0;
+            InstrD   <= 32'h00000013; // NOP, addi x0, x0, 0
             PCD      <= 32'b0;
             PCPlus4D <= 32'b0;
         end 
