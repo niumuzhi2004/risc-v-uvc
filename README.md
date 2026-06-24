@@ -65,6 +65,7 @@ The verification plan includes a comprehensive set of directed and constrained-r
     <img src="./.github/tb_arch.svg" width="80%"><br>
     <sup>UVM Testbench Architecture.</sup>
 </p>
+
 More on the testbench architecture can be found in the [Testbench Architecture](./docs/tb_architecture.md).
 
 
