@@ -57,7 +57,15 @@ The test is translated into machine code and terminated by the `Halt` signal tri
 | x8 | `52` | Line 13: `jalr` |
 | x9 | `0x000000FF` | Line 8: `xor` |
 
+## Verification Plan
+The verification plan includes a comprehensive set of directed and constrained-random tests to cover all supported instructions, hazard scenarios, and pipeline behaviors. More details can be found in the [Verification Plan](./docs/verification_plan.md).
+
 ## Testbench Architecture
+<p align="center">
+    <img src="./.github/tb_arch.svg" width="80%"><br>
+    <sup>UVM Testbench Architecture.</sup>
+</p>
+More on the testbench architecture can be found in the [Testbench Architecture](./docs/tb_architecture.md).
 
 
 ## Results

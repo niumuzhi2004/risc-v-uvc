@@ -1,26 +1,28 @@
 # Verification Plan
 
+- [Introduction](#introduction)
+- [Verification Approach](#verification-approach)
+- [Feature Coverage Plan](#feature-coverage-plan)
+- [Regression Plan](#regression-plan)
+
 ## Introduction
 The DUT is a RISC-V 5-stage pipelined processor that supports RV32I I-, B-, U-, J-, and S-type instructions. The verification process intends to ensure that the DUT can correctly execute all supported instructions, handle data and control hazards, and maintain proper pipeline operation while running various programs. Timing, power, and excluded instructions (`FENCE`, `ECALL`, `EBREAK`) are not in the scope of this verification plan. 
 
 ## Verification Approach
 The verification plan relies on the Universal Verification Methodology (UVM) framework to create a modular and reusable testbench. A combination of directed and constrained-random testing will be used to achieve comprehensive coverage of the DUT's functionality. Specifically, UVM 1.2 will be simulated using XSIM within Xilinx Vivado v2025.2, and the testbench will be built in SystemVerilog.
 
-## Testbench Architecture
-[To insert a diagram of the testbench architecture here, just like in the previous FIFO verification project.]
-
-The testbench architecture includes 2 agents—an instruction agent and a data memory agent—each consisting of a driver, monitor, and sequencer. The instruction agent drives programs into instruction memory, manages reset, and observes the instruction fetch interface. The data memory agent handles write and read transactions from the DUT and observes the data memory interface. In addition, a standalone monitor is used to observe the `DebugRegFile` port and the `Halt` signal. An instruction set simulator (ISS) will act as a reference model and generate expected results of instructions execution. The scoreboard will compare the DUT's output against the expected results from the ISS to determine pass/fail status. The coverage collector will specify the functional coverage groups and bins that represent the various instruction types and hazard scenarios. 
-
 ## Feature Coverage Plan
 <table>
 <thead>
-    <tr>
-    <th nowrap>Feature ID</th>
-    <th nowrap>Feature Description</th>
-    <th nowrap>Verification Scenarios</th>
-    <th nowrap>Test Type</th>
-    </tr>
-</thead>
+      <tr>
+        <th>Feature&nbsp;ID</th>
+        <th>Feature&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </th>
+        <th>Verification&nbsp;Scenarios&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </th>
+        <th>Test&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      </tr>
+    </thead>
 <tbody>
     <tr>
     <td rowspan="5">LOAD-01</td>
@@ -677,7 +679,7 @@ The testbench architecture includes 2 agents—an instruction agent and a data m
 </tbody>
 </table>
 
-<p><em>* Misaligned memory access produce defined behavior (write gets blocked or read returns all zero data). No exception mechanism was implemented.</em></p>
+> <p><em>* Misaligned memory access produce defined behavior (write gets blocked or read returns all zero data). No exception mechanism was implemented.</em></p>
 
 For the Excel version of the feature coverage plan, please refer to [the attached Excel file](./Verification_Plan.xlsx).
 
