@@ -1,5 +1,10 @@
 # Design of RISC-V Pipelined Processor (RV32I)
 
+- [Architecture Overview](#architecture-overview)
+- [List of Supported Instructions](#list-of-supported-instructions)
+- [List of Submodules](#list-of-submodules)
+- [References](#references)
+
 ## Architecture Overview
 The RISC-V pipelined processor is a 5-stage pipeline architecture that implements a subset of the RV32I instruction set architecture (ISA). The five stages of the pipeline are:
 1. **Instruction Fetch (IF)**: Fetches the instruction from the instruction memory.
@@ -565,7 +570,6 @@ Signal `mem_addr` is wired to `ALUResultM`, and `mem_wr_data` is wired to `Write
 Similarly, the appropriate bits in `mem_rd_data` is extracted based on `MemWidthM` and the last two bits of `mem_addr`, and then sign-extended or zero-extended based on `MemSignM` to produce the final read data `ReadDataM`.
 
 
-## Instruction Datapaths
 
 ## References
 D. Harris and S. L. Harris, Digital Design and Computer Architecture: RISC-V Edition.
