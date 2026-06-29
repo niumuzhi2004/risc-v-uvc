@@ -10,15 +10,18 @@ class instr_seq_item extends uvm_sequence_item;
     logic [2:0] funct3;
     logic [6:0] funct7; // only bit 5 is significant for RV32I
 
+    bit is_last = 0;    // for signaling program end
+
     `uvm_object_utils_begin(instr_seq_item)
         `uvm_field_enum(instr_t, instruction, UVM_ALL_ON)
-        `uvm_field_int(rs1,    UVM_ALL_ON)
-        `uvm_field_int(rs2,    UVM_ALL_ON)
-        `uvm_field_int(rd,     UVM_ALL_ON)
-        `uvm_field_int(imm,    UVM_ALL_ON)
-        `uvm_field_int(op,     UVM_ALL_ON)
-        `uvm_field_int(funct3, UVM_ALL_ON)
-        `uvm_field_int(funct7, UVM_ALL_ON)
+        `uvm_field_int(rs1,     UVM_ALL_ON)
+        `uvm_field_int(rs2,     UVM_ALL_ON)
+        `uvm_field_int(rd,      UVM_ALL_ON)
+        `uvm_field_int(imm,     UVM_ALL_ON)
+        `uvm_field_int(op,      UVM_ALL_ON)
+        `uvm_field_int(funct3,  UVM_ALL_ON)
+        `uvm_field_int(funct7,  UVM_ALL_ON)
+        `uvm_field_int(is_last, UVM_ALL_ON)
     `uvm_object_utils_end
 
     // constraints for immediate formatting per instruction type
