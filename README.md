@@ -17,7 +17,7 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | Instruction Set Architecture (ISA) | RV32I subset (excluding `FENCE`, `ECALL`, and `EBREAK`) |
 | Memory | Synchronous SRAMs in RTL ||
 | Reset | Synchronous, active-low |
-| Debug status flags | `Halt`, `DebugRegFiles` (32 register `x0`-`x31` exposed) |
+| Debug status flags | `Halt`, `Instr`, `PC`, `Valid`, `DebugRegFile` (32 register `x0`-`x31` exposed) |
 
 
 For more details on the design of RISC-V pipelined processor, please refer to the [DUT Design](./docs/DUT_specs.md).
