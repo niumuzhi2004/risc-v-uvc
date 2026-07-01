@@ -21,7 +21,10 @@ module tb_top();
         .mem_re(mem_re),
         .mem_rd_data(mem_rd_data),
         .DebugRegFile(DebugRegFile),
-        .Halt(Halt)
+        .Halt(Halt),
+        .Instr(),  // unused pins in smoke test
+        .PC(),
+        .Valid()
     );
 
     instr_mem IM (

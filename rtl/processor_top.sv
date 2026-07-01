@@ -19,7 +19,10 @@ module processor #(
 
     // register file debug port
     output logic [31:0] DebugRegFile [32],
-    output logic        Halt
+    output logic        Halt,
+    output logic [31:0] Instr,
+    output logic [31:0] PC,
+    output logic        Valid
 );
 
     // Fetch stage
@@ -77,7 +80,7 @@ module processor #(
     logic [1:0] ResultSrcE, MemWidthE, ALUSrc1E, CompOpE;
     logic [2:0] ALUControlE;
 
-    logic [31:0] RD1E, RD2E;
+    logic [31:0] InstrE, RD1E, RD2E;
     logic [4:0]  Rs1E, Rs2E, RdE;
     logic [31:0] PCE, ImmExtE, PCPlus4E;
     logic [31:0] AddSrcE, Src1E, Src2E, Comp1E, Comp2E, ALUResultE, WriteDataE;
@@ -86,6 +89,7 @@ module processor #(
 
     logic FlushE;
     logic [1:0] ForwardAE, ForwardBE;
+    logic ValidE;
 
     alu AU (Src1E, Src2E, ALUControlE, ALUResultE);
     comparator COM (CompSignE, CompOpE, Comp1E, Comp2E, CompResultE);
@@ -93,8 +97,8 @@ module processor #(
         clk, FlushE, rst_n, HaltD, HaltE, RegWriteD, RegWriteE, ResultSrcD, ResultSrcE, 
         MemWriteD, MemWriteE, MemWidthD, MemWidthE, MemSignD, MemSignE, JumpD, JumpE, BranchD,
         BranchE, ALUControlD, ALUControlE, ALUSrc1D, ALUSrc1E, ALUSrc2D, ALUSrc2E, AdderESrcD,
-        AdderESrcE, CompSignD, CompSignE, CompOpD, CompOpE, RD1D, RD1E, RD2D, RD2E, Rs1D,
-        Rs1E, Rs2D, Rs2E, PCD, PCE, ImmExtD, ImmExtE, RdD, RdE, PCPlus4D, PCPlus4E  
+        AdderESrcE, CompSignD, CompSignE, CompOpD, CompOpE, InstrD, InstrE, RD1D, RD1E, RD2D,
+        RD2E, Rs1D, Rs1E, Rs2D, Rs2E, PCD, PCE, ImmExtD, ImmExtE, RdD, RdE, PCPlus4D, PCPlus4E  
     );
 
     always_comb begin
@@ -135,6 +139,7 @@ module processor #(
 
         Comp2E    = Src2E;                              // same wire
         PCTargetE = AddSrcE + ImmExtE;                  // PC target adder
+        ValidE    = ~FlushE;                            // instruction is valid when no bubble
     end
 
 
@@ -142,9 +147,9 @@ module processor #(
     logic HaltM, RegWriteM, MemWriteM, MemSignM;
     logic [1:0] ResultSrcM, MemWidthM;
 
-    logic CompResultM;
+    logic CompResultM, ValidM;
     logic [4:0]  RdM;
-    logic [31:0] ReadDataM, ALUResultM, WriteDataM, PCPlus4M;
+    logic [31:0] InstrM, ReadDataM, ALUResultM, WriteDataM, PCM, PCPlus4M;
 
     assign mem_addr    = ALUResultM;
     assign mem_wr_data = WriteDataM;
@@ -152,8 +157,9 @@ module processor #(
 
     regM rM (
         clk, rst_n, HaltE, HaltM, RegWriteE, RegWriteM, ResultSrcE, ResultSrcM, MemWriteE,
-        MemWriteM, MemWidthE, MemWidthM, MemSignE, MemSignM, CompResultE, CompResultM,
-        ALUResultE, ALUResultM, WriteDataE, WriteDataM, RdE, RdM, PCPlus4E, PCPlus4M
+        MemWriteM, MemWidthE, MemWidthM, MemSignE, MemSignM, InstrE, InstrM, CompResultE, 
+        CompResultM, ALUResultE, ALUResultM, WriteDataE, WriteDataM, PCE, PCM, RdE, RdM,
+        PCPlus4E, PCPlus4M, ValidE, ValidM
     );
 
     logic [15:0] read_half;
@@ -233,16 +239,21 @@ module processor #(
     logic HaltW;
     logic [1:0] ResultSrcW;
 
-    logic CompResultW;
-    logic [31:0] ALUResultW, ReadDataW, PCPlus4W;
+    logic CompResultW, ValidW;
+    logic [31:0] InstrW, ALUResultW, ReadDataW, PCW, PCPlus4W;
 
     regW rW (
-        clk, rst_n, HaltM, HaltW, RegWriteM, RegWriteW, ResultSrcM, ResultSrcW, CompResultM,
-        CompResultW, ALUResultM, ALUResultW, ReadDataM, ReadDataW, RdM, RdW, PCPlus4M, PCPlus4W
+        clk, rst_n, HaltM, HaltW, RegWriteM, RegWriteW, ResultSrcM, ResultSrcW, 
+        InstrM, InstrW, CompResultM, CompResultW, ALUResultM, ALUResultW, ReadDataM,
+        ReadDataW, PCM, PCW, RdM, RdW, PCPlus4M, PCPlus4W, ValidM, ValidW
     );
 
     always_comb begin
-        Halt = HaltW;                                   // make external
+        // make external
+        Halt  = HaltW;
+        Instr = InstrW;
+        PC    = PCW;
+        Valid = ValidW;
         
         case (ResultSrcW)                               // ResultW select mux
             RESULT_SEL_COM_RESULT: ResultW = {31'b0, CompResultW};

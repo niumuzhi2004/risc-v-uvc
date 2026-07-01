@@ -34,6 +34,8 @@ module regE(
     output logic [1:0] CompOpE,
 
     // from main pipeline
+    input  logic [31:0] InstrD,
+    output logic [31:0] InstrE,
     input  logic [31:0] RD1D,
     output logic [31:0] RD1E,
     input  logic [31:0] RD2D,
@@ -68,6 +70,7 @@ module regE(
             AdderESrcE  <= 1'b0;
             CompSignE   <= 1'b0;
             CompOpE     <= 2'b0;
+            InstrE      <= 32'b0;
             RD1E        <= 32'b0;
             RD2E        <= 32'b0;
             Rs1E        <= 5'b0;
@@ -92,6 +95,7 @@ module regE(
             AdderESrcE  <= AdderESrcD;
             CompSignE   <= CompSignD;
             CompOpE     <= CompOpD;
+            InstrE      <= InstrD;
             RD1E        <= RD1D;
             RD2E        <= RD2D;
             Rs1E        <= Rs1D;
