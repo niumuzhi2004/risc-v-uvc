@@ -28,10 +28,10 @@ class debug_monitor extends uvm_monitor;
         forever begin
             @(vif.monitor_cb);
             if (vif.monitor_cb.Valid && !vif.monitor_cb.Halt) begin
-                mon_item       = debug_seq_item::type_id::create("mon_item");
-                mon_item.Instr = vif.monitor_cb.Instr;
-                mon_item.PC    = vif.monitor_cb.PC;
-                mon_item.DebugRegFile = vif.monitor_cb.DebugRegFile;
+                mon_item         = debug_seq_item::type_id::create("mon_item");
+                mon_item.Instr   = vif.monitor_cb.Instr;
+                mon_item.PC      = vif.monitor_cb.PC;
+                mon_item.RegFile = vif.monitor_cb.RegFile;
 
                 debug_ap_scoreboard.write(mon_item);
                 debug_ap_coverage.write(mon_item);

@@ -9,7 +9,7 @@ class iss extends uvm_component;
     uvm_analysis_imp_iss #(debug_seq_item, iss) iss_imp;
 
     // sends predicted register file values to scoreboard
-    uvm_analysis_port #(iss_result_item) iss_ap;
+    uvm_analysis_port #(debug_seq_item) iss_ap;
 
     function new(string name = "iss", uvm_component parent = null);
         super.new(name, parent);
@@ -19,10 +19,6 @@ class iss extends uvm_component;
         super.build_phase(phase);
         iss_imp = new("iss_imp", this);
         iss_ap  = new("iss_ap",  this);
-    endfunction
-
-    function void connect_phase(uvm_phase phase);
-        super.connect_phase(phase);
     endfunction
 
     function void start_of_simulation_phase(uvm_phase phase);
@@ -235,10 +231,10 @@ class iss extends uvm_component;
         reg_file[0] = 32'b0;
 
         // send predicted register file to scoreboard
-        iss_result_item result = iss_result_item::type_id::create("result");
-        result.Instr = item.Instr;
-        result.PC    = PC;
-        result.predicted_reg_file = reg_file;
+        debug_seq_item result = debug_seq_item::type_id::create("result");
+        result.Instr   = item.Instr;
+        result.PC      = PC;
+        result.RegFile = reg_file;
         iss_ap.write(result);
 
     endfunction
