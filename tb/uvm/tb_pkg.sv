@@ -8,6 +8,8 @@ package tb_pkg;
     `include "uvm_macros.svh"
 
     `uvm_analysis_imp_decl(_iss)
+    `uvm_analysis_imp_decl(_exp)
+    `uvm_analysis_imp_decl(_act)
 
     typedef enum logic [5:0] { 
         LB, LH, LW, LBU, LHU,                                   // LOAD
