@@ -1,12 +1,13 @@
 `ifndef TB_PKG
 `define TB_PKG
 
-`include "uvm_macros.svh"
-
 package tb_pkg;
 
     import uvm_pkg::*;
     import processor_pkg::*;
+    `include "uvm_macros.svh"
+
+    `uvm_analysis_imp_decl(_iss)
 
     typedef enum logic [5:0] { 
         LB, LH, LW, LBU, LHU,                                   // LOAD
