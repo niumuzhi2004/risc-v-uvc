@@ -2,8 +2,7 @@ class debug_monitor extends uvm_monitor;
     `uvm_component_utils(debug_monitor)
 
     virtual debug_if vif;
-    uvm_analysis_port #(debug_seq_item) debug_ap_scoreboard;
-    uvm_analysis_port #(debug_seq_item) debug_ap_coverage;
+    uvm_analysis_port #(debug_seq_item) debug_ap;
     uvm_event halt_event;
 
     function new(string name = "debug_monitor", uvm_component parent = null);
@@ -12,8 +11,7 @@ class debug_monitor extends uvm_monitor;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        debug_ap_scoreboard = new("debug_ap_scoreboard", this);
-        debug_ap_coverage   = new("debug_ap_coverage", this);
+        debug_ap = new("debug_ap", this);
 
         if (!uvm_config_db #(virtual debug_if)::get(this, "", "vif", vif)) begin
             `uvm_fatal("NO_VIF", "Virtual interface not found!")
@@ -33,8 +31,7 @@ class debug_monitor extends uvm_monitor;
                 mon_item.PC      = vif.monitor_cb.PC;
                 mon_item.RegFile = vif.monitor_cb.RegFile;
 
-                debug_ap_scoreboard.write(mon_item);
-                debug_ap_coverage.write(mon_item);
+                debug_ap.write(mon_item);
             end
             else if (vif.monitor_cb.Halt)
                 halt_event.trigger();
