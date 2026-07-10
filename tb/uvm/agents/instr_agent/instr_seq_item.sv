@@ -34,8 +34,6 @@ class instr_seq_item extends uvm_sequence_item;
             imm[19:12] == 8'b0;
         else if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU})
             imm[19:13] == 7'b0 && imm[0] == 1'b0;
-        else if (instruction == JAL)
-            imm[0] == 1'b0;
         else if (~(instruction inside {AUIPC, LUI}))
             imm == 20'b0;
     }
@@ -111,8 +109,8 @@ class instr_seq_item extends uvm_sequence_item;
     constraint pc_align {
         if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU, JAL}) begin
             bucket dist { 0 := 3, 1 := 1 };
-            bucket == 0 -> imm[1] == 1'b0;
-            bucket == 1 -> imm[1] == 1'b1;
+            bucket == 0 -> imm[0] == 1'b0;
+            bucket == 1 -> imm[0] == 1'b1;
         end
     }
 

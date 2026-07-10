@@ -67,7 +67,7 @@ class instr_driver extends uvm_driver #(instr_seq_item);
         else if (req.op == 7'd99)                           // B-type
             instruction = {req.imm[12], req.imm[10:5], req.rs2, req.rs1, req.funct3, req.imm[4:1], req.imm[11], req.op};
         else if (req.op == 7'd111)                          // J-type
-            instruction = {req.imm[20], req.imm[10:1], req.imm[11], req.imm[19:12], req.rd, req.op};
+            instruction = {req.imm[19], req.imm[9:0], req.imm[10], req.imm[18:11], req.rd, req.op};
         else 
             instruction = 32'b0;
 
