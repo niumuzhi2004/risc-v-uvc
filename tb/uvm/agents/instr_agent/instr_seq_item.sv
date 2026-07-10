@@ -63,6 +63,59 @@ class instr_seq_item extends uvm_sequence_item;
         (instruction inside {SLLI, SRLI, SRAI}) -> imm[11:5] == 7'b0;
     }
 
+    // coverage-driven constraint on immediate
+    constraint imm_dist {
+        if (instruction inside {ADDI, SLTI, SLTIU}) begin
+            bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1, 4 := 1 };
+            bucket == 0 -> imm[11:0] == 12'h7FF;
+            bucket == 1 -> imm[11:0] inside {[12'h001:12'h7FE]};
+            bucket == 2 -> imm[11:0] == 12'h000;
+            bucket == 3 -> imm[11:0] inside {[12'h801:12'hFFF]};
+            bucket == 4 -> imm[11:0] == 12'h800;
+        end 
+        else if (instruction inside {SLLI, SRLI, SRAI}) begin
+            bucket dist { 0 := 1, 1 := 1, 2 := 1 };
+            bucket == 0 -> imm[4:0] == 5'b00000;
+            bucket == 1 -> imm[4:0] inside {[5'b00001:5'b11110]};
+            bucket == 2 -> imm[4:0] == 5'b11111;
+        end
+        else if (instruction inside {XORI, ORI, ANDI}) begin
+            bucket dist { 0 := 1, 1 := 1, 2 := 1 };
+            bucket == 0 -> imm[11:0] == 12'hFFF;
+            bucket == 1 -> imm[11:0] inside {[12'h001:12'hFFE]};
+            bucket == 2 -> imm[11:0] == 12'h000;
+        end
+        else if (instruction inside {AUIPC, LUI}) begin
+            bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1, 4 := 1 };
+            bucket == 0 -> imm[19:0] == 20'hFFFFF;
+            bucket == 1 -> imm[19:0] inside {[20'h80000:20'hFFFFE]};
+            bucket == 2 -> imm[19:0] == 20'h7FFFF;
+            bucket == 3 -> imm[19:0] inside {[20'h00001:20'h7FFFE]};
+            bucket == 4 -> imm[19:0] == 20'h00000;
+        end
+        else if (instruction inside {LB, LH, LW, LBU, LHU, SW, SH, SB}) begin
+            bucket dist { 0 := 1, 1 := 1, 2 := 1 };
+            bucket == 0 -> imm[11:0] inside {[12'h001:12'h7FF]};
+            bucket == 1 -> imm[11:0] == 12'h000;
+            bucket == 2 -> imm[11:0] inside {[12'h800:12'hFFF]};
+        end
+    }
+
+    // coverage-driven constraint on rd
+    constraint rd_dist {
+        if (!instruction inside {SB, SH, SW, BEQ, BNE, BLT, BGE, BLTU, BGEU})
+            rd dist { 0 := 1, [1:31] :/ 3 };
+    }
+
+    // coverage-driven constraint on PC alignment for branch and jump instructions
+    constraint pc_align {
+        if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU, JAL}) begin
+            bucket dist { 0 := 3, 1 := 1 };
+            bucket == 0 -> imm[1] == 1'b0;
+            bucket == 1 -> imm[1] == 1'b1;
+        end
+    }
+
     function new(string name = "instr_seq_item");
         super.new(name);
     endfunction
