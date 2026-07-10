@@ -20,7 +20,7 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
         </th>
         <th>Verification&nbsp;Scenarios&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </th>
-        <th>Test&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Test&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
       </tr>
     </thead>
 <tbody>
@@ -286,7 +286,7 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="5">RTYPE-02</td>
     <td rowspan="5">Instruction add/sub add/subtract values from registers rs1 and rs2 and save to rd</td>
     <td>RTYPE-02-A: rs1 is positive/zero/negative</td>
-    <td rowspan="3">Constrained Random</td>
+    <td rowspan="5">Constrained Random</td>
     </tr>
     <tr>
     <td>RTYPE-02-B: rs2 is positive/zero/negative</td>
@@ -296,7 +296,6 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     </tr>
     <tr>
     <td>RTYPE-02-D: result overflows</td>
-    <td rowspan="2">Directed Testing</td>
     </tr>
     <tr>
     <td>RTYPE-02-E: result underflows</td>
@@ -590,7 +589,7 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">HAZARD-02</td>
     <td rowspan="2">For a load instruction, which requires two clock cycles to settle, processor should stall &amp; flush</td>
     <td>HAZARD-02-A: rs1 in ID is x0/x1-x31 and matches Rd in EX</td>
-    <td rowspan="2">Directed Testing</td>
+    <td rowspan="2">Constrained Random</td>
     </tr>
     <tr>
     <td>HAZARD-02-B: rs2 in ID is x0/x1-x31 and matches Rd in EX</td>
@@ -638,7 +637,7 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">OP-01</td>
     <td rowspan="2">Halt must only fire once on illegal opcode</td>
     <td>OP-01-A: op code is legal</td>
-    <td rowspan="2">Directed Testing</td>
+    <td rowspan="2">Observe at End of Program **</td>
     </tr>
     <tr>
     <td>OP-01-B: op code is illegal and triggers halt</td>
@@ -674,12 +673,14 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td>PIPELINE-01</td>
     <td>Pipeline should implement NOP correctly if pipelined is not filled</td>
     <td>PIPELINE-01-A: first 4 cycles after reset deasserts</td>
-    <td>Directed Testing</td>
+    <td>Observe After Reset ***</td>
     </tr>
 </tbody>
 </table>
 
 > <p><em>* Misaligned memory access produce defined behavior (write gets blocked or read returns all zero data). No exception mechanism was implemented.</em></p>
+> <p><em>** At the end of program, an illegal instruction (32'b0) is sent to trigger halt of the processor.</em></p>
+> <p><em>*** After reset, pipeline is emptied and should implement NOP correctly until getting filled by instructions.</em></p>
 
 For the Excel version of the feature coverage plan, please refer to [the attached Excel file](./Verification_Plan.xlsx).
 
