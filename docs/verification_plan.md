@@ -526,17 +526,17 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="6">JTYPE-01</td>
     <td rowspan="6">Instruction jal jump to a target PC, which is the sum of the current PC and a sign-extended immediate</td>
     <td>JTYPE-01-A: PC jumps backward</td>
-    <td rowspan="3">Constrained Random</td>
+    <td rowspan="2">Constrained Random</td>
     </tr>
     <tr>
     <td>JTYPE-01-B: PC jumps forward</td>
     </tr>
     <tr>
     <td>JTYPE-01-C: PC jumps to precisely the next address (PC+4)</td>
+    <td rowspan="4">Directed Testing</td>
     </tr>
     <tr>
     <td>JTYPE-01-D: PC jumps to itself (invalid)</td>
-    <td rowspan="3">Directed Testing</td>
     </tr>
     <tr>
     <td>JTYPE-01-E: PC jumps to negative (invalid)</td>
