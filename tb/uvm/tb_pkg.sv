@@ -12,6 +12,9 @@ package tb_pkg;
     `uvm_analysis_imp_decl(_act)
     `uvm_analysis_imp_decl(_coverage)
 
+    parameter int WATCHDOG_CYCLES = 100;
+    parameter int CLK_PERIOD = 10; // ns
+
     // instruction types
     typedef enum logic [5:0] { 
         LB, LH, LW, LBU, LHU,                                   // LOAD
