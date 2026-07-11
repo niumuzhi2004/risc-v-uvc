@@ -11,7 +11,7 @@ class invalid_branch_test extends base_test;
 
         fork
             branch_seq.start(environment.ins_agent.sequencer);
-            #(WATCHDOG_CYCLES * CLK_PERIOD);
+            #(WATCHDOG_CYCLES_PER_TEST * CLK_PERIOD);
         join_any
         disable fork;
         `uvm_warning("WATCHDOG", "Expected Behavior: Branch-to-itself loop timeout.")

@@ -12,8 +12,10 @@ package tb_pkg;
     `uvm_analysis_imp_decl(_act)
     `uvm_analysis_imp_decl(_coverage)
 
-    parameter int WATCHDOG_CYCLES = 100;
-    parameter int CLK_PERIOD = 10; // ns
+    parameter int WATCHDOG_CYCLES_PER_TEST = 100;
+    parameter int WATCHDOG_CYCLES_GLOBAL   = 200;
+    parameter int CLK_PERIOD               = 10; // ns
+    parameter int PC_RESET                 = 32'h00000000;
 
     // instruction types
     typedef enum logic [5:0] { 
@@ -55,6 +57,44 @@ package tb_pkg;
         CONSECUTIVE_LOAD_STALLS        = 4'b0111,
         CONSECUTIVE_JUMP_OR_BRANCHES   = 4'b1000
     } hazard_seq_t;
+
+
+    // include testbench components
+    `include "./agents/data_mem_agent/data_mem_seq_item.sv"
+    `include "./agents/data_mem_agent/data_mem_sequencer.sv"
+    `include "./agents/data_mem_agent/data_mem_monitor.sv"
+    `include "./agents/data_mem_agent/data_mem_driver.sv"
+    `include "./agents/data_mem_agent/data_mem_agent.sv"
+
+    `include "./agents/instr_agent/instr_seq_item.sv"
+    `include "./agents/instr_agent/instr_sequencer.sv"
+    `include "./agents/instr_agent/instr_monitor.sv"
+    `include "./agents/instr_agent/instr_driver.sv"
+    `include "./agents/instr_agent/instr_agent.sv"
+
+    `include "./debug_monitor/debug_seq_item.sv"
+    `include "./debug_monitor/debug_monitor.sv"
+
+    `include "./env/scoreboard.sv"
+    `include "./env/iss.sv"
+    `include "./env/coverage_collector.sv"
+    `include "./env/env.sv"
+
+    `include "./sequences/base_seq.sv"
+    `include "./sequences/constrained_random_seq.sv"
+    `include "./sequences/addr_alignment_seq.sv"
+    `include "./sequences/consecutive_hazards_seq.sv"
+    `include "./sequences/invalid_branch_seq.sv"
+    `include "./sequences/invalid_jal_seq.sv"
+    `include "./sequences/invalid_jalr_seq.sv"
+
+    `include "./tests/base_test.sv"
+    `include "./tests/constrained_random_test.sv"
+    `include "./tests/addr_alignment_test.sv"
+    `include "./tests/consecutive_hazards_test.sv"
+    `include "./tests/invalid_branch_test.sv"
+    `include "./tests/invalid_jal_test.sv"
+    `include "./tests/invalid_jalr_test.sv"
 
 endpackage
 
