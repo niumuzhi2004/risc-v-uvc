@@ -24,7 +24,7 @@ module processor_sva (
     // halt never deasserts once asserted, unless during reset
     property halt_assertion;
         @(posedge clk) disable iff (~rst_n)
-        not($fell(Halt));
+        Halt |-> ##1 Halt;
     endproperty
 
     // program counter needs to be a multiple of 4
@@ -39,10 +39,10 @@ module processor_sva (
         (DebugRegFile[0] == 32'b0);
     endproperty
 
-    // valid must not be high during reset
+    // valid must not be high during reset or halt
     property valid_value;
         @(posedge clk) 
-        ~rst_n |-> ~Valid;
+        (~rst_n || Halt) |-> ~Valid;
     endproperty
 
     no_simultaneous_read_and_write: assert property (mem_we_re);
@@ -50,6 +50,6 @@ module processor_sva (
     halt_only_asserts_once:         assert property (halt_assertion);
     program_counter_aligned:        assert property (pc_value);
     register_x0_always_zero:        assert property (x0_value);
-    not_valid_during_reset:         assert property (valid_value);
+    not_valid_during_reset_or_halt: assert property (valid_value);
 
 endmodule

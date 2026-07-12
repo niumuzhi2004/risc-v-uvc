@@ -81,6 +81,18 @@ The verification plan includes a comprehensive set of directed and constrained-r
 More on the testbench architecture can be found in the [Testbench Architecture](./docs/tb_architecture.md).
 
 
+## Assertions
+
+The testbench includes a set of SystemVerilog Assertions (SVA) to ensure several crucial properties of the DUT are not violated during the simulation.
+
+1. No simultaneous read and write to the data memory.
+2. Valid write enable signals for store instructions (`4'b1111`, `4'b0000`, `4'b1100`, `4'b0011`, `4'b0001`, `4'b0010`, `4'b0100`, `4'b1000`).
+3. Halt never deasserts once asserted, unless during reset.
+4. PCF is always aligned to 4 bytes.
+5. Register `x0` is always zero.
+6. Valid must not be asserted during reset or halt.
+
+
 ## Results
 
 
