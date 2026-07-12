@@ -65,7 +65,7 @@ The following sequences are designed to generate test programs that cover the fe
 
 | Sequence | Type | Program Length | Description |
 |----------|------|----------------|-------------|
-| `constrained_random_seq` | Constrained Random | 20-64 | Generates a random program that aims to broadly cover all instruction types |
+| `constrained_random_seq` | Constrained Random | 20-62 | Generates a random program that aims to broadly cover all instruction types |
 | `addr_alignment_seq` | Directed Testing | 16 | Tests address alignment when loading or storing byte or half values (`LOAD-04`, `STYPE-04`) |
 | `consecutive_hazards_seq` | Directed Testing | 20 | Tests back-to-back RAW, load stall, and jump/branch hazards (`HAZARD-04`) |
 | `invalid_branch_seq` | Directed Testing | 3 | Tests branch instructions with invalid PC targets (`BTYPE-03`) |
