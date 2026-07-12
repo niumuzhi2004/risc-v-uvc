@@ -62,9 +62,21 @@ The verification plan includes a comprehensive set of directed and constrained-r
 
 ## Testbench Architecture
 <p align="center">
-    <img src="./.github/tb_arch.svg" width="80%"><br>
+    <img src="./.github/tb_arch.svg" width="90%"><br>
     <sup>UVM Testbench Architecture.</sup>
 </p>
+
+- **UVC** - UVM verification component
+    - **Instruction Agent**: Drives programs into instruction memory and manages reset
+    - **Data Memory Agent**: Handles write and read transactions from the DUT
+    - **Debug Monitor**: standalone monitor collecting debug status flags
+    - **Sequence Items**: `instr_seq_item`, `data_mem_seq_item`, and `debug_seq_item`
+- **Environment** - System-level components
+    - **Scoreboard**: Compares DUT outputs with expected results
+    - **Coverage Collector**: functional covergroups reflecting [Feature Coverage Plan](./docs/verification_plan.md#feature-coverage-plan)
+    - **ISS**: SystemVerilog Instruction Set Simulator as reference model
+- **Sequences** - 1 constrained random and 5 directed sequences to cover instructions and hazards
+- **Tests** - 6 tests mapping to the sequences above
 
 More on the testbench architecture can be found in the [Testbench Architecture](./docs/tb_architecture.md).
 
