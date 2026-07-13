@@ -22,7 +22,7 @@ class addr_alignment_seq extends base_seq;
                 if (!item.randomize() with {
                     instruction == applicable_instrs[i];
                     rs1         == 5'b0;    // rs1 is x0
-                    imm[1:0]    == addr_lower_bits[j]
+                    imm[1:0]    == addr_lower_bits[j];
                 }) begin
                     `uvm_error("Body", "Randomization failed!")
                 end

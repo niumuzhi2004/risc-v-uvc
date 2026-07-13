@@ -20,6 +20,8 @@ class instr_driver extends uvm_driver #(instr_seq_item);
     endfunction
 
     task run_phase(uvm_phase phase);
+        bit last;
+        
         halt_event.reset();
 
         // collect entire program from sequencer
@@ -30,7 +32,7 @@ class instr_driver extends uvm_driver #(instr_seq_item);
             end
             instr_mem[program_size] = encode(req);
             program_size++;
-            bit last = req.is_last;
+            last = req.is_last;
             seq_item_port.item_done();
             if (last) break;
         end

@@ -20,9 +20,9 @@ class data_mem_seq_item extends uvm_sequence_item;
     function string convert2string();
         string debugStr = "";
         if (WE != 4'b0) 
-            debugStr += $sformatf("Writing %h to address %h (byte enable: %b). \n", WD, A, WE);
+            debugStr = {debugStr, $sformatf("Writing %h to address %h (byte enable: %b). \n", WD, A, WE)};
         if (RE)
-            debugStr += $sformatf("Reading %h from address %h.", RD, A);
+            debugStr = {debugStr, $sformatf("Reading %h from address %h.", RD, A)};
         return debugStr;
     endfunction
     

@@ -6,8 +6,8 @@ class invalid_branch_test extends base_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        phase.raise_objection(this);
         invalid_branch_seq branch_seq = invalid_branch_seq::type_id::create("branch_seq");
+        phase.raise_objection(this);
 
         fork
             branch_seq.start(environment.ins_agent.sequencer);

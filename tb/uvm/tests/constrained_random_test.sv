@@ -6,8 +6,8 @@ class constrained_random_test extends base_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        phase.raise_objection(this);
         constrained_random_seq seq = constrained_random_seq::type_id::create("seq");
+        phase.raise_objection(this);
         seq.start(environment.ins_agent.sequencer);
         phase.drop_objection(this);
     endtask

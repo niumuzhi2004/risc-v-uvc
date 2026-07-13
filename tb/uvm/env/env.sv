@@ -1,4 +1,4 @@
-class env extends uvm_environment;
+class env extends uvm_env;
     `uvm_component_utils(env)
 
     data_mem_agent     data_agent;

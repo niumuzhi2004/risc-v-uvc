@@ -6,8 +6,8 @@ class addr_alignment_test extends base_test;
     endfunction
 
     task run_phase(uvm_phase phase);
+        addr_alignment_seq seq = addr_alignment_seq::type_id::create("seq");     
         phase.raise_objection(this);
-        addr_alignment_seq seq = addr_alignment_seq::type_id::create("seq");
         seq.start(environment.ins_agent.sequencer);
         phase.drop_objection(this);
     endtask

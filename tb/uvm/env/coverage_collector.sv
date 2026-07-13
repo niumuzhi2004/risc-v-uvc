@@ -453,11 +453,12 @@ class coverage_collector extends uvm_component;
         logic [6:0]  funct7      = item.Instr[31:25];
         logic [31:0] imm         = 32'b0;
         logic [31:0] addr        = 32'b0;
-        logic [1:0]  comp_result = 2'b11; // 2'b00 -> a > b, 2'b01 -> a = b, 2'b10 -> a < b
         logic        overflow    = 1'b0;
         logic        underflow   = 1'b0;
         logic [31:0] PC_target   = 32'b0;
         logic [32:0] R_result    = 33'b0; // used for checking overflow/underflow in ADD/SUB instructions
+        compare_t    comp_result;
+        hazard_t     curr_hazard = NO_HAZARD;
 
         rd = item.Instr[11:7];
 
@@ -631,8 +632,6 @@ class coverage_collector extends uvm_component;
                 jtype_cg.sample(imm, PC_target, PC_target[1:0]);
             end
         endcase
-
-        hazard_t curr_hazard  = NO_HAZARD;
 
         if (prev_instr != 32'b0 && item.Instr != 32'b0) begin
 

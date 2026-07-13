@@ -29,7 +29,7 @@ class debug_monitor extends uvm_monitor;
                 mon_item         = debug_seq_item::type_id::create("mon_item");
                 mon_item.Instr   = vif.monitor_cb.Instr;
                 mon_item.PC      = vif.monitor_cb.PC;
-                mon_item.RegFile = vif.monitor_cb.RegFile;
+                mon_item.RegFile = vif.monitor_cb.DebugRegFile;
 
                 debug_ap.write(mon_item);
             end

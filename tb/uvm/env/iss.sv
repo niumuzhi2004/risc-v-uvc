@@ -29,8 +29,6 @@ class iss extends uvm_component;
 
     function void write_iss(debug_seq_item item);
 
-        PC = item.PC;
-
         // decode instruction
         logic [6:0]  op       = item.Instr[6:0];
         logic [4:0]  rd       = 5'b0;
@@ -41,6 +39,9 @@ class iss extends uvm_component;
         logic [31:0] imm      = 32'b0;
         logic [31:0] mem_addr = 32'b0;
         logic [31:0] mem_data = 32'b0;
+        debug_seq_item result;
+        
+        PC = item.PC;
 
         case (op)
 
@@ -231,7 +232,7 @@ class iss extends uvm_component;
         reg_file[0] = 32'b0;
 
         // send predicted register file to scoreboard
-        debug_seq_item result = debug_seq_item::type_id::create("result");
+        result         = debug_seq_item::type_id::create("result");
         result.Instr   = item.Instr;
         result.PC      = PC;
         result.RegFile = reg_file;

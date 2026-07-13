@@ -6,8 +6,8 @@ class invalid_jal_test extends base_test;
     endfunction
 
     task run_phase(uvm_phase phase);
+        invalid_jal_seq jal_seq = invalid_jal_seq::type_id::create("jal_seq");
         phase.raise_objection(this);
-        invalid_jal_seq       jal_seq = invalid_jal_seq::type_id::create("jal_seq");
 
         fork 
             jal_seq.start(environment.ins_agent.sequencer);

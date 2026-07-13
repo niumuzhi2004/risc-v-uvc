@@ -23,11 +23,9 @@ class instr_monitor extends uvm_monitor;
         forever begin
             @ (vif.monitor_cb);
             // exclude NOP instructions
-            if (vif.monitor_cb.rst_n && vif.monitor_cb.RD != 32'h00000013) begin
+            if (vif.rst_n && vif.monitor_cb.RD != 32'h00000013) begin
                 mon_item    = instr_seq_item::type_id::create("mon_item");
-                mon_item.A  = vif.monitor_cb.A;
-                mon_item.RD = vif.monitor_cb.RD;
-                instr_ap.write(mon_item);
+                // instr_ap.write(mon_item);
             end
         end
     endtask
