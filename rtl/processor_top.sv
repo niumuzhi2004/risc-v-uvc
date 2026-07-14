@@ -32,8 +32,8 @@ module processor #(
     regF #(PC_RESET) rF (clk, ~StallF, rst_n, PCF_p, PCF);
 
     always_comb begin
-        PCF_p    = PCSrcE ? PCTargetE : PCPlus4F;       // PC source select mux
         PCPlus4F = PCF + 4;                             // PC plus 4 adder
+        PCF_p    = PCSrcE ? PCTargetE : PCPlus4F;       // PC source select mux
     end
 
 
