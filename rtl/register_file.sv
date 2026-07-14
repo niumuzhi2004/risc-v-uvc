@@ -25,7 +25,8 @@ module register_file(
     always_comb begin
         RD1 = (A1 == 5'b0) ? 32'b0 : regs[A1];
         RD2 = (A2 == 5'b0) ? 32'b0 : regs[A2];
-        DebugRegFile = regs;    // debug port wired to registers
+        DebugRegFile = regs;        // debug port wired to registers
+        DebugRegFile[0] = 32'b0;    // x0 is always 0
     end
     
 endmodule
