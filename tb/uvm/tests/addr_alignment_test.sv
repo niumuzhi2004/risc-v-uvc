@@ -8,7 +8,13 @@ class addr_alignment_test extends base_test;
     task run_phase(uvm_phase phase);
         addr_alignment_seq seq = addr_alignment_seq::type_id::create("seq");     
         phase.raise_objection(this);
+        if (!seq.randomize()) begin 
+            `uvm_error("TEST", "Sequence randomization failed!")
+        end
         seq.start(environment.ins_agent.sequencer);
+        `uvm_info("TEST", "Waiting for DUT to halt...", UVM_NONE)
+        halt_event.wait_trigger();
+        `uvm_info("TEST", "DUT halted! Ending test.", UVM_NONE)
         phase.drop_objection(this);
     endtask
 
