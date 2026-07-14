@@ -44,14 +44,14 @@ class consecutive_hazards_seq extends base_seq;
 
         foreach (hazard_list[i]) begin
             instr_seq_item item = instr_seq_item::type_id::create("item");
-            generate_hazard(item, prev_item, hazard_list[i]);
+            generate_hazard(item, hazard_list[i]);
             program_items.push_back(item);
             prev_item = item;
         end
 
     endtask
 
-    task generate_hazard(ref instr_seq_item curr_item, instr_seq_item prev_item, hazard_t hazard_type);
+    task generate_hazard(instr_seq_item curr_item, hazard_t hazard_type);
 
         case (hazard_type)
             RAW: begin
@@ -94,7 +94,7 @@ class consecutive_hazards_seq extends base_seq;
                 if (!curr_item.randomize() with {
                     // for convenience we use JAL to represent jump/branch operations
                     instruction == JAL;
-                    imm[19:0]   == 20'h00004; // PC = PC + 8
+                    imm[19:1]   == {18'b0, 1'b1}; // PC = PC + 8
                     rd          != 5'b0;
                 }) begin
                     `uvm_error("Body", "Randomization failed!")
