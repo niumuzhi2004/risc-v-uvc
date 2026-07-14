@@ -28,6 +28,7 @@ xsim.pb
 xsim.covdb/
 sim/dfx_runtime.txt
 coverage_report/
+*.str
 
 # ModelSim/QuestaSim
 *.mti
