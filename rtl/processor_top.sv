@@ -139,7 +139,7 @@ module processor #(
 
         Comp2E    = Src2E;                              // same wire
         PCTargetE = AddSrcE + ImmExtE;                  // PC target adder
-        ValidE    = ~FlushE;                            // instruction is valid when no bubble
+        ValidE    = ~FlushE & rst_n;                    // instruction is valid when no bubble
     end
 
 
