@@ -6,8 +6,7 @@ interface debug_if(
     logic [31:0] Instr, PC;
     logic [31:0] DebugRegFile [32];
 
-    // capture when the register file writes at the falling edge
-    clocking monitor_cb @(negedge clk);
+    clocking monitor_cb @(posedge clk);
         default input #1;
         input Halt, Valid, Instr, PC, DebugRegFile;
     endclocking
