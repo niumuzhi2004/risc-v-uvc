@@ -5,7 +5,8 @@ interface instr_if(
     logic rst_n;
     logic [31:0] A, RD;
 
-    clocking driver_cb @(posedge clk);
+    // drive on the falling edge when the new Address becomes stable
+    clocking driver_cb @(negedge clk);
         default input #1 output #1;
         input A;
         output RD, rst_n;

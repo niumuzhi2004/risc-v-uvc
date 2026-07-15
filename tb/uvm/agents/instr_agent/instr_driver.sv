@@ -21,7 +21,6 @@ class instr_driver extends uvm_driver #(instr_seq_item);
 
     task run_phase(uvm_phase phase);
         bit last;
-        
         halt_event.reset();
 
         // collect entire program from sequencer
@@ -31,15 +30,19 @@ class instr_driver extends uvm_driver #(instr_seq_item);
                 `uvm_fatal("PROGRAM_OVERFLOW", "Program exceeds instruction memory size.")
             end
             instr_mem[program_size] = encode(req);
+            `uvm_info("INSTR_DRIVER", $sformatf("Encoded instruction @ address %0d: %h", program_size, instr_mem[program_size]), UVM_LOW)
             program_size++;
             last = req.is_last;
             seq_item_port.item_done();
             if (last) break;
         end
+        `uvm_info("INSTR_DRIVER", $sformatf("Program loaded with %0d instructions.", program_size), UVM_LOW)
 
         // manage halt and reset
-        instr_mem[program_size] = 32'b0; // insert all zero instruction as last instruction
+        instr_mem[program_size] = 32'b0;        // insert all zero instruction as last instruction
+        
         vif.driver_cb.rst_n <= 1'b0;
+        vif.driver_cb.RD    <= instr_mem[0];    // load first instruction
         repeat (2) @ (vif.driver_cb);
         vif.driver_cb.rst_n <= 1'b1;
 
@@ -48,7 +51,6 @@ class instr_driver extends uvm_driver #(instr_seq_item);
             @ (vif.driver_cb);
             vif.driver_cb.RD <= instr_mem[vif.driver_cb.A[7:2]];
         end while (halt_event.is_off());
-            
     endtask
 
     function logic [31:0] encode(instr_seq_item req);
