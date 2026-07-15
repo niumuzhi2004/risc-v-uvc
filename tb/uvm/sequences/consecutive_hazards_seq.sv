@@ -40,13 +40,16 @@ class consecutive_hazards_seq extends base_seq;
             `uvm_error("Body", "Randomization failed!")
         end
         program_items.push_back(first_item);
+        `uvm_info("SEQ", $sformatf("Generated %s", first_item.convert2string()), UVM_LOW)
         prev_item = first_item;
 
         foreach (hazard_list[i]) begin
             instr_seq_item item = instr_seq_item::type_id::create("item");
             generate_hazard(item, hazard_list[i]);
             program_items.push_back(item);
-            prev_item = item;
+            if (hazard_list[i] != NO_HAZARD) 
+                prev_item = item;
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
         end
 
     endtask
@@ -75,7 +78,7 @@ class consecutive_hazards_seq extends base_seq;
                     rd != 5'b0;
 
                 }) begin
-                    `uvm_error("Body", "Randomization failed!")
+                    `uvm_error("Body", "Randomization failed when generating RAW!")
                 end
             end
 
@@ -86,7 +89,7 @@ class consecutive_hazards_seq extends base_seq;
                     rs1 == prev_item.rd;
                     rd  != 5'b0; 
                 }) begin
-                    `uvm_error("Body", "Randomization failed!")
+                    `uvm_error("Body", "Randomization failed when generating LOAD_STALL!")
                 end
             end
 
@@ -94,10 +97,10 @@ class consecutive_hazards_seq extends base_seq;
                 if (!curr_item.randomize() with {
                     // for convenience we use JAL to represent jump/branch operations
                     instruction == JAL;
-                    imm[19:1]   == {18'b0, 1'b1}; // PC = PC + 8
+                    imm[19:1]   == {17'b0, 2'b10}; // PC = PC + 8
                     rd          != 5'b0;
                 }) begin
-                    `uvm_error("Body", "Randomization failed!")
+                    `uvm_error("Body", "Randomization failed when generating JUMP_BRANCH!")
                 end
             end
 
