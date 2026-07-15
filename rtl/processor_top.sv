@@ -26,7 +26,7 @@ module processor #(
 );
 
     // Fetch stage
-    logic PCSrcE, StallF;
+    logic PCSrcE, StallF, ValidF;
     logic [31:0] PCPlus4F, PCTargetE, PCF_p;
 
     regF #(PC_RESET) rF (clk, ~StallF, rst_n, PCF_p, PCF);
@@ -34,6 +34,7 @@ module processor #(
     always_comb begin
         PCPlus4F = PCF + 4;                             // PC plus 4 adder
         PCF_p    = PCSrcE ? PCTargetE : PCPlus4F;       // PC source select mux
+        ValidF   = rst_n;                               // instruction is valid flag
     end
 
 
@@ -58,13 +59,16 @@ module processor #(
     logic [4:0]  Rs1D, Rs2D, RdD;
     logic [31:0] PCD, ImmExtD, PCPlus4D;
 
-    logic StallD, FlushD;
+    logic StallD, FlushD, ValidD;
 
     assign Rs1D = InstrD[19:15];
     assign Rs2D = InstrD[24:20];
     assign RdD  = InstrD[11:7];
 
-    regD rD (clk, ~StallD, FlushD, rst_n, InstrF, InstrD, PCF, PCD, PCPlus4F, PCPlus4D);
+    regD rD (
+        clk, ~StallD, FlushD, rst_n, InstrF, InstrD,
+        PCF, PCD, PCPlus4F, PCPlus4D, ValidF, ValidD
+    );
     control_unit CU (
         op, funct3, funct7_5, RegWriteD, ResultSrcD, MemWriteD, MemWidthD, MemSignD, JumpD,
         BranchD, ALUControlD, ALUSrc1D, ALUSrc2D, AdderESrcD, CompSignD, CompOpD, ImmSrcD, HaltD
@@ -89,7 +93,7 @@ module processor #(
 
     logic FlushE;
     logic [1:0] ForwardAE, ForwardBE;
-    logic ValidE, rst_n_delay1, rst_n_delay2;
+    logic ValidE;
 
     alu AU (Src1E, Src2E, ALUControlE, ALUResultE);
     comparator COM (CompSignE, CompOpE, Comp1E, Comp2E, CompResultE);
@@ -98,19 +102,8 @@ module processor #(
         MemWriteD, MemWriteE, MemWidthD, MemWidthE, MemSignD, MemSignE, JumpD, JumpE, BranchD,
         BranchE, ALUControlD, ALUControlE, ALUSrc1D, ALUSrc1E, ALUSrc2D, ALUSrc2E, AdderESrcD,
         AdderESrcE, CompSignD, CompSignE, CompOpD, CompOpE, InstrD, InstrE, RD1D, RD1E, RD2D,
-        RD2E, Rs1D, Rs1E, Rs2D, Rs2E, PCD, PCE, ImmExtD, ImmExtE, RdD, RdE, PCPlus4D, PCPlus4E  
+        RD2E, Rs1D, Rs1E, Rs2D, Rs2E, PCD, PCE, ImmExtD, ImmExtE, RdD, RdE, PCPlus4D, PCPlus4E, ValidD, ValidE  
     );
-    
-    // delay reset for 2 clock periods
-    always_ff @(posedge clk) begin
-        if (~rst_n) begin
-            rst_n_delay1 <= 1'b0;
-            rst_n_delay2 <= 1'b0;
-        end else begin
-            rst_n_delay1 <= rst_n;
-            rst_n_delay2 <= rst_n_delay1;
-        end
-    end
 
     always_comb begin
         PCSrcE = (CompResultE && BranchE) || JumpE;     // PCSrc logic
@@ -150,7 +143,6 @@ module processor #(
 
         Comp2E    = Src2E;                              // same wire
         PCTargetE = AddSrcE + ImmExtE;                  // PC target adder
-        ValidE    = ~FlushE & rst_n_delay2;             // instruction is valid when no bubble
     end
 
 

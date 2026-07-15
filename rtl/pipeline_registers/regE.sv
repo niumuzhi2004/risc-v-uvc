@@ -51,7 +51,9 @@ module regE(
     input  logic [4:0]  RdD,
     output logic [4:0]  RdE,
     input  logic [31:0] PCPlus4D,
-    output logic [31:0] PCPlus4E
+    output logic [31:0] PCPlus4E,
+    input  logic        ValidD,
+    output logic        ValidE
 );
 
     always_ff @(posedge clk) begin
@@ -79,6 +81,7 @@ module regE(
             ImmExtE     <= 32'b0;
             RdE         <= 5'b0;
             PCPlus4E    <= 32'b0;
+            ValidE      <= 1'b0;
         end 
         else begin
             HaltE       <= HaltD;
@@ -104,6 +107,7 @@ module regE(
             ImmExtE     <= ImmExtD;
             RdE         <= RdD;
             PCPlus4E    <= PCPlus4D;
+            ValidE      <= ValidD;
         end
     end
 

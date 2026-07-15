@@ -9,7 +9,9 @@ module regD(
     input  logic [31:0] PCF,
     output logic [31:0] PCD,
     input  logic [31:0] PCPlus4F,
-    output logic [31:0] PCPlus4D
+    output logic [31:0] PCPlus4D,
+    input  logic        ValidF,
+    output logic        ValidD
 );
 
     always_ff @(posedge clk) begin
@@ -17,11 +19,13 @@ module regD(
             InstrD   <= 32'h00000013; // NOP, addi x0, x0, 0
             PCD      <= 32'b0;
             PCPlus4D <= 32'b0;
+            ValidD   <= 1'b0;
         end 
         else if (en) begin
             InstrD   <= InstrF;
             PCD      <= PCF;
             PCPlus4D <= PCPlus4F;
+            ValidD   <= ValidF;
         end
     end
     
