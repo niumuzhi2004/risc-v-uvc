@@ -21,6 +21,7 @@ class base_seq extends uvm_sequence #(instr_seq_item);
                 `uvm_error("Body", "Randomization failed!")
             end
             program_items.push_back(item);
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
         end
     endtask
 

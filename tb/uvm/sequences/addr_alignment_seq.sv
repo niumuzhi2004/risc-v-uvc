@@ -28,6 +28,7 @@ class addr_alignment_seq extends base_seq;
                 end
 
                 program_items.push_back(item);
+                `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
             end
         end
     endtask
