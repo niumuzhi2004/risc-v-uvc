@@ -44,7 +44,7 @@ class scoreboard extends uvm_scoreboard;
             `uvm_error("SB_MISMATCH", "Comparison queue not matched at the end of simulation!")
         end
 
-        `uvm_info("SB_SUMMARY", $sformatf("%d instructions passed, %d failed", pass_count, fail_count), UVM_LOW)
+        `uvm_info("SB_SUMMARY", $sformatf("%0d instructions passed, %0d failed", pass_count, fail_count), UVM_LOW)
     endfunction
 
     function void compare(debug_seq_item exp_item, debug_seq_item act_item);
@@ -60,9 +60,9 @@ class scoreboard extends uvm_scoreboard;
             end
 
             foreach (exp_item.RegFile[i]) begin
-                if (exp_item.RegFile[i] != act_item.RegFile[i]) begin
+                if (exp_item.RegFile[i] !== act_item.RegFile[i]) begin
                     `uvm_error("SB_FAIL", $sformatf(
-                        "Instruction %h @ PC (%h): x%d Mismatch: Expected %h, Got %h",
+                        "Instruction %h @ PC (%h): x%0d Mismatch: Expected %h, Got %h",
                         act_item.Instr, act_item.PC,
                         i, exp_item.RegFile[i], act_item.RegFile[i]
                     ))
