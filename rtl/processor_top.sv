@@ -89,7 +89,7 @@ module processor #(
 
     logic FlushE;
     logic [1:0] ForwardAE, ForwardBE;
-    logic ValidE;
+    logic ValidE, rst_n_delay1, rst_n_delay2;
 
     alu AU (Src1E, Src2E, ALUControlE, ALUResultE);
     comparator COM (CompSignE, CompOpE, Comp1E, Comp2E, CompResultE);
@@ -100,6 +100,17 @@ module processor #(
         AdderESrcE, CompSignD, CompSignE, CompOpD, CompOpE, InstrD, InstrE, RD1D, RD1E, RD2D,
         RD2E, Rs1D, Rs1E, Rs2D, Rs2E, PCD, PCE, ImmExtD, ImmExtE, RdD, RdE, PCPlus4D, PCPlus4E  
     );
+    
+    // delay reset for 2 clock periods
+    always_ff @(posedge clk) begin
+        if (~rst_n) begin
+            rst_n_delay1 <= 1'b0;
+            rst_n_delay2 <= 1'b0;
+        end else begin
+            rst_n_delay1 <= rst_n;
+            rst_n_delay2 <= rst_n_delay1;
+        end
+    end
 
     always_comb begin
         PCSrcE = (CompResultE && BranchE) || JumpE;     // PCSrc logic
@@ -139,7 +150,7 @@ module processor #(
 
         Comp2E    = Src2E;                              // same wire
         PCTargetE = AddSrcE + ImmExtE;                  // PC target adder
-        ValidE    = ~FlushE & rst_n;                    // instruction is valid when no bubble
+        ValidE    = ~FlushE & rst_n_delay2;             // instruction is valid when no bubble
     end
 
 
