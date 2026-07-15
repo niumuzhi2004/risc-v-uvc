@@ -2,13 +2,13 @@
 
 // test program
 // jal xn, -252 -> JTYPE-01-E
-// jal xn, 230  -> JTYPE-01-F
+// jal xn, 260  -> JTYPE-01-F
 // jal xn, 0    -> JTYPE-01-D
 
 class invalid_jal_seq extends base_seq;
     `uvm_object_utils(invalid_jal_seq)
 
-    logic [19:0] imm_list [3] = '{20'hFFF82, 20'h00073, 20'h00000};
+    logic [19:0] imm_list [3] = '{20'hFFF82, 20'h00082, 20'h00000};
 
     constraint program_length {
         program_size == 3;      // override randomized program size in base_seq
@@ -30,6 +30,7 @@ class invalid_jal_seq extends base_seq;
             end
 
             program_items.push_back(item);
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
         end
     endtask
 

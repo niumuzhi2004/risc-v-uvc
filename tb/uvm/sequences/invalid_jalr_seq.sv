@@ -2,13 +2,13 @@
 
 // test program
 // jalr xn, x0, -252 -> JALR-01-E
-// jalr xn, x0, 234  -> JALR-01-F
+// jalr xn, x0, 264  -> JALR-01-F
 // jalr xn, x0, 8    -> JALR-01-D
 
 class invalid_jalr_seq extends base_seq;
     `uvm_object_utils(invalid_jalr_seq)
 
-    logic [11:0] imm_list [3] = '{12'hF04, 12'h0EA, 12'h008};
+    logic [11:0] imm_list [3] = '{12'hF04, 12'h108, 12'h008};
 
     constraint program_length {
         program_size == 3;      // override randomized program size in base_seq
@@ -24,13 +24,14 @@ class invalid_jalr_seq extends base_seq;
 
             if (!item.randomize() with {
                 instruction == JALR;
-                rs1         == 5'b0;
+                rs1         == 5'b0; // rs1 = x0
                 imm[11:0]   == imm_list[i];
             }) begin
                 `uvm_error("Body", "Randomization failed!")
             end
 
             program_items.push_back(item);
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
         end
     endtask
 
