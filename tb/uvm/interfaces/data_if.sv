@@ -6,7 +6,8 @@ interface data_if(
     logic [3:0]  WE;
     logic        RE;
 
-    clocking driver_cb @(posedge clk);
+    // drive on the falling edge when the new inputs becomes stable
+    clocking driver_cb @(negedge clk);
         default input #1 output #1;
         input  A, WD, WE, RE;
         output RD;
