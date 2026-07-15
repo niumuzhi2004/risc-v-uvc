@@ -23,6 +23,7 @@ class iss extends uvm_component;
 
     function void start_of_simulation_phase(uvm_phase phase);
         super.start_of_simulation_phase(phase);
+        reg_file[0] = 32'b0;
         foreach (data_mem[i])
             data_mem[i] = 32'hDEADBEEF;
     endfunction
@@ -234,9 +235,11 @@ class iss extends uvm_component;
         // send predicted register file to scoreboard
         result         = debug_seq_item::type_id::create("result");
         result.Instr   = item.Instr;
-        result.PC      = PC;
+        result.PC      = item.PC;
         result.RegFile = reg_file;
         iss_ap.write(result);
+
+        `uvm_info("ISS", $sformatf("Processed %s", result.convert2string()), UVM_LOW)
 
     endfunction
 
