@@ -35,7 +35,7 @@ class instr_seq_item extends uvm_sequence_item;
             imm[19:12] == 8'b0;
         else if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU})
             imm[19:13] == 7'b0 && imm[0] == 1'b0;
-        else if (~(instruction inside {AUIPC, LUI}))
+        else if (~(instruction inside {AUIPC, LUI, JAL}))
             imm == 20'b0;
     }
 
@@ -109,9 +109,7 @@ class instr_seq_item extends uvm_sequence_item;
     // coverage-driven constraint on PC alignment for branch and jump instructions
     constraint pc_align {
         if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU, JAL}) {
-            bucket dist { 0 := 3, 1 := 1 };
-            bucket == 0 -> imm[0] == 1'b0;
-            bucket == 1 -> imm[0] == 1'b1;
+            imm[1] == 1'b0;
         }
     }
 
