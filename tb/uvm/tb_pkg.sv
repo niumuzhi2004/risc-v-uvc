@@ -52,7 +52,6 @@ package tb_pkg;
         RAW_THEN_JUMP_OR_BRANCH        = 4'b0010,
         JUMP_OR_BRANCH_THEN_RAW        = 4'b0011,
         LOAD_STALL_THEN_JUMP_OR_BRANCH = 4'b0100,
-        JUMP_OR_BRANCH_THEN_LOAD_STALL = 4'b0101,
         CONSECUTIVE_RAWS               = 4'b0110,
         CONSECUTIVE_LOAD_STALLS        = 4'b0111,
         CONSECUTIVE_JUMP_OR_BRANCHES   = 4'b1000

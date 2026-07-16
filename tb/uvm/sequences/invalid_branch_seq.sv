@@ -2,13 +2,13 @@
 
 // test program
 // beq x0, x0, -252 -> BTYPE-03-E
-// beq x0, x0, 260  -> BTYPE-03-F
+// beq x0, x0, 516  -> BTYPE-03-F
 // beq x0, x0, 0    -> BTYPE-03-D
 
 class invalid_branch_seq extends base_seq;
     `uvm_object_utils(invalid_branch_seq)
 
-    logic [11:0] imm_list [3] = '{12'hF82, 12'h082, 12'h000};
+    logic [11:0] imm_list [3] = '{12'hF82, 12'h102, 12'h000};
 
     constraint program_length {
         program_size == 3;      // override randomized program size in base_seq

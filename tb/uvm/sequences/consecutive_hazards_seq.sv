@@ -10,13 +10,13 @@ class consecutive_hazards_seq extends base_seq;
     // NO_HAZARD instruction padded after every jump/branch
 
     hazard_t hazard_list [] = '{ 
-        RAW, LOAD_STALL, RAW, JUMP_BRANCH, NO_HAZARD, RAW, LOAD_STALL,
+        RAW, LOAD_STALL, RAW, RAW, JUMP_BRANCH, NO_HAZARD, RAW, LOAD_STALL,
         JUMP_BRANCH, NO_HAZARD, LOAD_STALL, RAW, RAW, LOAD_STALL,
         LOAD_STALL, RAW, JUMP_BRANCH, NO_HAZARD, JUMP_BRANCH, NO_HAZARD
     };
 
     constraint program_length {
-        program_size == 20;     // override randomized program size in base_seq
+        program_size == 21;     // override randomized program size in base_seq
     }
 
     function new(string name = "consecutive_hazards_seq");
