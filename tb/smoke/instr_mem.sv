@@ -7,7 +7,7 @@ module instr_mem(
     assign RD = mem[A];
 
     initial begin
-        $readmemh("../programs/smoke_test1.hex", mem);
+        $readmemh("smoke_test.hex", mem);
     end
     
 endmodule
