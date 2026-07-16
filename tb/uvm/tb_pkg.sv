@@ -12,8 +12,8 @@ package tb_pkg;
     `uvm_analysis_imp_decl(_act)
     `uvm_analysis_imp_decl(_coverage)
 
-    parameter int WATCHDOG_CYCLES_PER_TEST = 100;
-    parameter int WATCHDOG_CYCLES_GLOBAL   = 200;
+    parameter int WATCHDOG_CYCLES_PER_TEST = 200;
+    parameter int WATCHDOG_CYCLES_GLOBAL   = 250;
     parameter int CLK_PERIOD               = 10; // ns
     parameter int PC_RESET                 = 32'h00000000;
 

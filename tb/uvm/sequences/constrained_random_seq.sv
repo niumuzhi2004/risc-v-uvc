@@ -1,37 +1,93 @@
 class constrained_random_seq extends base_seq;
     `uvm_object_utils(constrained_random_seq)
 
+    int init_registers[31];
+    rand int unsigned PC_index;
+
     function new(string name = "constrained_random_seq");
         super.new(name);
+        foreach (init_registers[i]) begin
+            init_registers[i] = i + 1;
+        end
+        init_registers.shuffle();
     endfunction
 
     virtual task generate_program();
-        super.generate_program();
-        
-        // check if instruction is branch/jump
-        // if so, make sure PC target is between program start and end
-        // and is not the current PC (to avoid infinite loop)
 
-        // because jumping backwards may lead to infinite loops,
-        // forward jumps are preferred over backward jumps
-        // with a distribution of 80/20
+        // change the first 20 instructions to initialize registers
+        for (int i=0; i<20; ++i) begin
 
-        foreach (program_items[i]) begin
+            instr_seq_item item = instr_seq_item::type_id::create("item");
+            if (!item.randomize() with {
+                bucket dist { 0 := 7, 1 := 3 };
 
-            // for B-Type, PC advances by 
+                // 70% chance assign register value with ADDI
+                if (bucket == 0) {
+                    instruction == ADDI;
+                    rd          == init_registers[i];
+                    rs1         == 5'd0;
+                } 
+                
+                // 30% chance assign register value with LUI
+                else {
+                    instruction == LUI;
+                    rd          == init_registers[i];
+                }
+            }) begin
+                `uvm_error("Body", $sformatf("Randomization failed for instruction #%0d!", i))
+            end
+            program_items.push_back(item);
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
+
+        end
+
+        for (int i=20; i<program_size; ++i) begin
+            instr_seq_item item = instr_seq_item::type_id::create("item");
+            if (!item.randomize() with {
+                rs1 inside {0, init_registers[0:19]};
+                rs2 inside {0, init_registers[0:19]};
+            }) begin
+                `uvm_error("Body", $sformatf("Randomization failed for instruction #%0d!", i))
+            end
+            program_items.push_back(item);
+            `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
+        end
+
+        for (int i=20; i<program_size; ++i) begin
+
+            // check if instruction is branch/jump
+            // if so, make sure PC target is between program start and end
+            // and is not the current PC (to avoid infinite loop)
+
+            // because jumping backwards may lead to infinite loops,
+            // forward jumps are preferred over backward jumps
+            // with a distribution of 80/20
+
             if (program_items[i].op inside {7'd99, 7'd103, 7'd111}) begin
 
-                int PC_index;
-
-                if (i == 0) 
-                    PC_index = $urandom_range(1, program_size-1);           // must jump forward
-                else if (i == program_size - 1) 
-                    PC_index = $urandom_range(0, i-1);                      // must jump backward
+                if (i == 20) begin
+                    if (!randomize(PC_index) with {
+                        PC_index inside {[ 21:program_size-1 ]};            // must jump forward
+                    }) begin
+                        `uvm_error("SEQ", "Failed to randomize PC_index!")
+                    end
+                end
+                else if (i == program_size - 1) begin
+                    if (!randomize(PC_index) with {
+                        PC_index inside {[ 20:i-1 ]};                       // must jump backward
+                    }) begin
+                        `uvm_error("SEQ", "Failed to randomize PC_index!")
+                    end
+                end
                 else begin
-                    randcase
-                        80: PC_index = $urandom_range(i+1, program_size-1); // 80% prob jump forward
-                        20: PC_index = $urandom_range(0, i-1);              // 20% prob jump backward
-                    endcase
+                    if (!randomize(PC_index) with {
+                        PC_index dist {
+                            [i+1:program_size-1] :/ 80,                     // 80% prob jump forward
+                            [20:i-1]             :/ 20                      // 20% prob jump backward
+                        };
+                    }) begin
+                        `uvm_error("SEQ", "Failed to randomize PC_index!")
+                    end
                 end
 
                 case (program_items[i].op)

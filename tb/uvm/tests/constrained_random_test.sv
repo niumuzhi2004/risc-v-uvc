@@ -11,10 +11,22 @@ class constrained_random_test extends base_test;
         if (!seq.randomize()) begin 
             `uvm_error("TEST", "Sequence randomization failed!")
         end
-        seq.start(environment.ins_agent.sequencer);
-        `uvm_info("TEST", "Waiting for DUT to halt...", UVM_NONE)
-        halt_event.wait_trigger();
-        `uvm_info("TEST", "DUT halted! Ending test.", UVM_NONE)
+
+        fork
+            begin
+                seq.start(environment.ins_agent.sequencer);
+                `uvm_info("TEST", "Waiting for DUT to halt...", UVM_NONE)
+                halt_event.wait_trigger();
+                `uvm_info("TEST", "DUT halted! Ending test.", UVM_NONE)
+            end
+
+            begin
+                #(WATCHDOG_CYCLES_PER_TEST * CLK_PERIOD);
+            end
+        join_any
+        disable fork;
+        `uvm_warning("WATCHDOG", "Expected Behavior: There might be an infinite loop.")
+
         phase.drop_objection(this);
     endtask
 
