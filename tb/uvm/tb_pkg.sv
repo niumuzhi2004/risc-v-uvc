@@ -87,6 +87,7 @@ package tb_pkg;
     `include "./sequences/invalid_jal_seq.sv"
     `include "./sequences/invalid_jalr_seq.sv"
     `include "./sequences/directed_testing_seq.sv"
+    `include "./sequences/rand_without_jump_seq.sv"
 
     `include "./tests/base_test.sv"
     `include "./tests/constrained_random_test.sv"
@@ -96,6 +97,7 @@ package tb_pkg;
     `include "./tests/invalid_jal_test.sv"
     `include "./tests/invalid_jalr_test.sv"
     `include "./tests/directed_testing_test.sv"
+    `include "./tests/rand_without_jump_test.sv"
 
 endpackage
 

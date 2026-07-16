@@ -1,58 +1,72 @@
 class constrained_random_seq extends base_seq;
     `uvm_object_utils(constrained_random_seq)
 
-    int init_registers[31];
+    int registers[31];
     rand int unsigned PC_index;
 
     function new(string name = "constrained_random_seq");
         super.new(name);
-        foreach (init_registers[i]) begin
-            init_registers[i] = i + 1;
+        foreach (registers[i]) begin
+            registers[i] = i + 1;
         end
-        init_registers.shuffle();
+        registers.shuffle();
     endfunction
 
     virtual task generate_program();
 
+        // initialize register file to avoid unknown values
+        init_registers();
+
+        // create random instructions to form test program
+        create_random_instrs();
+
+        // filter branch/jump instructions to lower the probability of infinite loops
+        filter_branch_jump();
+
+    endtask
+
+    task init_registers();
         // change the first 20 instructions to initialize registers
         for (int i=0; i<20; ++i) begin
-
             instr_seq_item item = instr_seq_item::type_id::create("item");
             if (!item.randomize() with {
-                bucket dist { 0 := 7, 1 := 3 };
+                bucket_fill dist { 0 := 7, 1 := 3 };
 
                 // 70% chance assign register value with ADDI
-                if (bucket == 0) {
+                if (bucket_fill == 0) {
                     instruction == ADDI;
-                    rd          == init_registers[i];
+                    rd          == registers[i];
                     rs1         == 5'd0;
                 } 
                 
                 // 30% chance assign register value with LUI
                 else {
                     instruction == LUI;
-                    rd          == init_registers[i];
+                    rd          == registers[i];
                 }
             }) begin
                 `uvm_error("Body", $sformatf("Randomization failed for instruction #%0d!", i))
             end
             program_items.push_back(item);
             `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
-
         end
+    endtask
 
+    task create_random_instrs();
         for (int i=20; i<program_size; ++i) begin
             instr_seq_item item = instr_seq_item::type_id::create("item");
             if (!item.randomize() with {
-                rs1 inside {0, init_registers[0:19]};
-                rs2 inside {0, init_registers[0:19]};
+                rs1 inside {0, registers[0:19]};
+                rs2 inside {0, registers[0:19]};
             }) begin
                 `uvm_error("Body", $sformatf("Randomization failed for instruction #%0d!", i))
             end
             program_items.push_back(item);
             `uvm_info("SEQ", $sformatf("Generated %s", item.convert2string()), UVM_LOW)
         end
+    endtask
 
+    task filter_branch_jump();
         for (int i=20; i<program_size; ++i) begin
 
             // check if instruction is branch/jump
@@ -108,7 +122,6 @@ class constrained_random_seq extends base_seq;
 
             end
         end
-
     endtask
 
 endclass

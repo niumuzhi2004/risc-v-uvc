@@ -12,6 +12,7 @@ class instr_seq_item extends uvm_sequence_item;
 
     bit is_last = 0;        // for signaling program end
     rand bit [2:0] bucket;  // used for randomization constraint
+    rand bit bucket_fill;   // used for randomization constraint in constrained_random_seq
 
     `uvm_object_utils_begin(instr_seq_item)
         `uvm_field_enum(instr_t, instruction, UVM_ALL_ON)
@@ -84,13 +85,20 @@ class instr_seq_item extends uvm_sequence_item;
             bucket == 1 -> imm[11:0] inside {[12'h001:12'hFFE]};
             bucket == 2 -> imm[11:0] == 12'h000;
         }
-        else if (instruction inside {AUIPC, LUI}) {
+        else if (instruction == LUI) {
             bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1, 4 := 1 };
             bucket == 0 -> imm[19:0] == 20'hFFFFF;
             bucket == 1 -> imm[19:0] inside {[20'h80000:20'hFFFFE]};
             bucket == 2 -> imm[19:0] == 20'h7FFFF;
             bucket == 3 -> imm[19:0] inside {[20'h00001:20'h7FFFE]};
             bucket == 4 -> imm[19:0] == 20'h00000;
+        }
+        else if (instruction == AUIPC) {
+            bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1 };
+            bucket == 0 -> imm[19:0] == 20'hFFFFF;
+            bucket == 1 -> imm[19:0] inside {[20'h80000:20'hFFFFE]};
+            bucket == 2 -> imm[19:0] == 20'h7FFFF;
+            bucket == 3 -> imm[19:0] inside {[20'h00000:20'h7FFFE]};
         }
         else if (instruction inside {LB, LH, LW, LBU, LHU, SW, SH, SB}) {
             bucket dist { 0 := 1, 1 := 1, 2 := 1 };
@@ -164,8 +172,10 @@ class instr_seq_item extends uvm_sequence_item;
             op = 7'd3;
         else if (instruction inside {ADDI, SLLI, SLTI, SLTIU, XORI, SRLI, SRAI, ORI, ANDI})
             op = 7'd19;
-        else if (instruction == AUIPC) 
+        else if (instruction == AUIPC) begin
             op = 7'd23;
+            `uvm_info("INSTR_SEQ_ITEM", $sformatf("AUIPC bucket: %0d", bucket), UVM_LOW)
+        end
         else if (instruction inside {SB, SH, SW})
             op = 7'd35;
         else if (instruction inside {ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND})
