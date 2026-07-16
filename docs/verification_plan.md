@@ -604,10 +604,10 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td>HAZARD-03-B: instruction is branch</td>
     </tr>
     <tr>
-    <td rowspan="9">HAZARD-04</td>
-    <td rowspan="9">Processor needs to respond to consecutive hazards of various types correctly</td>
+    <td rowspan="8">HAZARD-04</td>
+    <td rowspan="8">Processor needs to respond to consecutive hazards of various types correctly</td>
     <td>HAZARD-04-A: RAW followed by load stall</td>
-    <td rowspan="9">Directed Testing</td>
+    <td rowspan="8">Directed Testing</td>
     </tr>
     <tr>
     <td>HAZARD-04-B: load stall followed by RAW</td>
@@ -622,16 +622,13 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td>HAZARD-04-E: load stall followed by jump/branch</td>
     </tr>
     <tr>
-    <td>HAZARD-04-F: jump/branch followed by load stall</td>
+    <td>HAZARD-04-F: consecutive RAWs</td>
     </tr>
     <tr>
-    <td>HAZARD-04-G: consecutive RAWs</td>
+    <td>HAZARD-04-G: consecutive load stalls (2nd load instruction's rs1 is the same register as rd of the 1st load instruction)</td>
     </tr>
     <tr>
-    <td>HAZARD-04-H: consecutive load stalls (2nd load instruction's rs1 is the same register as rd of the 1st load instruction)</td>
-    </tr>
-    <tr>
-    <td>HAZARD-04-I: consecutive jumps/branches</td>
+    <td>HAZARD-04-H: consecutive jumps/branches</td>
     </tr>
     <tr>
     <td rowspan="2">OP-01</td>

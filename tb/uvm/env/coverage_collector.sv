@@ -418,7 +418,6 @@ class coverage_collector extends uvm_component;
             bins raw_then_jb   = { RAW_THEN_JUMP_OR_BRANCH };
             bins jb_then_raw   = { JUMP_OR_BRANCH_THEN_RAW };
             bins load_then_jb  = { LOAD_STALL_THEN_JUMP_OR_BRANCH };
-            bins jb_then_load  = { JUMP_OR_BRANCH_THEN_LOAD_STALL };
             bins consec_raws   = { CONSECUTIVE_RAWS };
             bins consec_loads  = { CONSECUTIVE_LOAD_STALLS };
             bins consec_jbs    = { CONSECUTIVE_JUMP_OR_BRANCHES };
