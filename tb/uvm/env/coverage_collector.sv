@@ -681,8 +681,6 @@ class coverage_collector extends uvm_component;
                     hazard_sequence = JUMP_OR_BRANCH_THEN_RAW;
                 else if (prev_hazard == LOAD_STALL && curr_hazard == JUMP_BRANCH)
                     hazard_sequence = LOAD_STALL_THEN_JUMP_OR_BRANCH;
-                else if (prev_hazard == JUMP_BRANCH && curr_hazard == LOAD_STALL)
-                    hazard_sequence = JUMP_OR_BRANCH_THEN_LOAD_STALL;
                 else if (prev_hazard == RAW && curr_hazard == RAW)
                     hazard_sequence = CONSECUTIVE_RAWS;
                 else if (prev_hazard == LOAD_STALL && curr_hazard == LOAD_STALL)
