@@ -172,10 +172,8 @@ class instr_seq_item extends uvm_sequence_item;
             op = 7'd3;
         else if (instruction inside {ADDI, SLLI, SLTI, SLTIU, XORI, SRLI, SRAI, ORI, ANDI})
             op = 7'd19;
-        else if (instruction == AUIPC) begin
+        else if (instruction == AUIPC)
             op = 7'd23;
-            `uvm_info("INSTR_SEQ_ITEM", $sformatf("AUIPC bucket: %0d", bucket), UVM_LOW)
-        end
         else if (instruction inside {SB, SH, SW})
             op = 7'd35;
         else if (instruction inside {ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND})
