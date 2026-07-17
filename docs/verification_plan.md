@@ -476,10 +476,11 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">BTYPE-04</td>
     <td rowspan="2">PC should be a multiple of 4 to be aligned</td>
     <td>BTYPE-04-A: PC is aligned (PC[1:0] = 2'b00)</td>
-    <td rowspan="2">Constrained Random</td>
+    <td rowspan="1">Constrained Random</td>
     </tr>
     <tr>
     <td>BTYPE-04-B: PC is not aligned</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td rowspan="6">JALR-01</td>
@@ -516,10 +517,11 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">JALR-03</td>
     <td rowspan="2">PC should be a multiple of 4 to be aligned</td>
     <td>JALR-03-A: PC is aligned (PC[1:0] = 2'b00)</td>
-    <td rowspan="2">Constrained Random</td>
+    <td rowspan="1">Constrained Random</td>
     </tr>
     <tr>
     <td>JALR-03-B: PC is not aligned</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td rowspan="6">JTYPE-01</td>
@@ -556,10 +558,11 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">JTYPE-03</td>
     <td rowspan="2">PC should be a multiple of 4 to be aligned</td>
     <td>JTYPE-03-A: PC is aligned (PC[1:0] = 2'b00)</td>
-    <td rowspan="2">Constrained Random</td>
+    <td rowspan="1">Constrained Random</td>
     </tr>
     <tr>
     <td>JTYPE-03-B: PC is not aligned</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td rowspan="7">HAZARD-01</td>
