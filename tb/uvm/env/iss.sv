@@ -107,8 +107,12 @@ class iss extends uvm_component;
                     3'b010: reg_file[rd] = {31'b0, ($signed(reg_file[rs1]) < $signed({{20{imm[11]}}, imm[11:0]}))};     // slti
                     3'b011: reg_file[rd] = {31'b0, (reg_file[rs1] < {{20{imm[11]}}, imm[11:0]})};                       // sltiu
                     3'b100: reg_file[rd] = reg_file[rs1] ^ {{20{imm[11]}}, imm[11:0]};                                  // xori
-                    3'b101: reg_file[rd] = imm[10] ? (reg_file[rs1] >>> imm[4:0])                                       // srai
-                                                   : (reg_file[rs1] >> imm[4:0]);                                       // srli
+                    3'b101: begin
+                        if (imm[10])
+                            reg_file[rd] = ($signed(reg_file[rs1]) >>> imm[4:0]);                                       // srai
+                        else
+                            reg_file[rd] = (reg_file[rs1] >> imm[4:0]);                                                 // srli
+                    end
                     3'b110: reg_file[rd] = reg_file[rs1] | {{20{imm[11]}}, imm[11:0]};                                  // ori
                     3'b111: reg_file[rd] = reg_file[rs1] & {{20{imm[11]}}, imm[11:0]};                                  // andi
                     default: reg_file[rd] = 32'b0;
@@ -167,8 +171,12 @@ class iss extends uvm_component;
                     3'b010: reg_file[rd] = {31'b0, ($signed(reg_file[rs1]) < $signed(reg_file[rs2]))};  // slt
                     3'b011: reg_file[rd] = {31'b0, (reg_file[rs1] < reg_file[rs2])};                    // sltu
                     3'b100: reg_file[rd] = reg_file[rs1] ^ reg_file[rs2];                               // xor
-                    3'b101: reg_file[rd] = funct7[5] ? (reg_file[rs1] >>> reg_file[rs2][4:0])           // sra
-                                                     : (reg_file[rs1] >> reg_file[rs2][4:0]);           // srl
+                    3'b101: begin
+                        if (funct7[5])
+                            reg_file[rd] = ($signed(reg_file[rs1]) >>> reg_file[rs2][4:0]);             // sra
+                        else
+                            reg_file[rd] = (reg_file[rs1] >> reg_file[rs2][4:0]);                       // srl
+                    end
                     3'b110: reg_file[rd] = reg_file[rs1] | reg_file[rs2];                               // or
                     3'b111: reg_file[rd] = reg_file[rs1] & reg_file[rs2];                               // and
                     default: reg_file[rd] = 32'b0;
