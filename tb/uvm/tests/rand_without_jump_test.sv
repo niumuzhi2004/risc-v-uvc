@@ -22,10 +22,10 @@ class rand_without_jump_test extends base_test;
 
             begin
                 #(WATCHDOG_CYCLES_PER_TEST * CLK_PERIOD);
+                `uvm_warning("WATCHDOG", "Expected Behavior: There might be an infinite loop.")
             end
         join_any
         disable fork;
-        `uvm_warning("WATCHDOG", "Expected Behavior: There might be an infinite loop.")
 
         phase.drop_objection(this);
     endtask

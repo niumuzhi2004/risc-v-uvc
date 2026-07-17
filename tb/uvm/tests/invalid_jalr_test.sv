@@ -22,10 +22,10 @@ class invalid_jalr_test extends base_test;
             
             begin
                 #(WATCHDOG_CYCLES_PER_TEST * CLK_PERIOD);
+                `uvm_warning("WATCHDOG", "Expected Behavior: Jump-to-itself loop timeout.")
             end
         join_any
         disable fork;
-        `uvm_warning("WATCHDOG", "Expected Behavior: Jump-to-itself loop timeout.")
 
         phase.drop_objection(this);
     endtask
