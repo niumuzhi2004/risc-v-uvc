@@ -304,15 +304,14 @@ class coverage_collector extends uvm_component;
     endgroup
 
     covergroup jalr_cg with function sample(
-        logic [31:0] sign_extended_imm,
+        logic [31:0] PC_change,
         logic [31:0] PC_target,
         logic [1:0]  PC_target_lower_bits
     );
         // JALR-01
-        cp_sign_extended_imm: coverpoint sign_extended_imm {
+        cp_PC_change: coverpoint PC_change {
             bins jumps_backward = { [32'h8000_0000:32'hFFFF_FFFF] };
             bins jumps_forward  = { [32'h0000_0005:32'h7FFF_FFFF] };
-            bins does_not_jump  = { 32'h0000_0000 };
             bins jumps_to_next  = { 32'h0000_0004 };
         }
 
@@ -620,7 +619,7 @@ class coverage_collector extends uvm_component;
                 imm[11:0]   = item.Instr[31:20];
                 imm[31:12]  = {20{imm[11]}};
                 PC_target   = (item.RegFile[rs1] + imm);
-                jalr_cg.sample(imm, PC_target, PC_target[1:0]);
+                jalr_cg.sample(PC_target-item.PC, PC_target, PC_target[1:0]);
             end
 
             7'd111: begin   // J-Type
