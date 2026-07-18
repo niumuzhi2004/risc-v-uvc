@@ -155,7 +155,6 @@ module processor #(
     logic [31:0] InstrM, ReadDataM, ALUResultM, WriteDataM, PCM, PCPlus4M;
 
     assign mem_addr    = ALUResultM;
-    assign mem_wr_data = WriteDataM;
     assign mem_re      = (ResultSrcM == RESULT_SEL_READ_DATA);
 
     regM rM (
@@ -170,6 +169,10 @@ module processor #(
 
     always_comb begin
 
+        mem_wr_data = WriteDataM;
+        read_half   = 16'b0;
+        read_byte   = 8'b0;
+
         case (ResultSrcM)                               // ResultM forwarding mux
             RESULT_SEL_COM_RESULT: ResultM = {31'b0, CompResultM};
             RESULT_SEL_ALU_RESULT: ResultM = ALUResultM;
@@ -182,18 +185,36 @@ module processor #(
                 MEM_SEL_WORD: mem_we = 4'b1111;
                 MEM_SEL_HALF: begin
                     case (ALUResultM[1:0])
-                        2'b00:   mem_we = 4'b0011;
-                        2'b10:   mem_we = 4'b1100;
-                        default: mem_we = 4'b0000;      // wrong alignment, block write 
+                        2'b00: begin
+                            mem_wr_data[15:0]  = WriteDataM[15:0]; 
+                            mem_we             = 4'b0011;
+                        end
+                        2'b10: begin
+                            mem_wr_data[31:16] = WriteDataM[15:0]; 
+                            mem_we             = 4'b1100;
+                        end
+                        default: mem_we = 4'b0000;      // wrong alignment, block write
                     endcase
                 end
                 MEM_SEL_BYTE: begin
                     case (ALUResultM[1:0])
-                        2'b00:   mem_we = 4'b0001;
-                        2'b01:   mem_we = 4'b0010;
-                        2'b10:   mem_we = 4'b0100;
-                        2'b11:   mem_we = 4'b1000;
-                        default: mem_we = 4'b0000;      // wrong alignment, block write 
+                        2'b00: begin
+                            mem_wr_data[7:0]   = WriteDataM[7:0]; 
+                            mem_we             = 4'b0001;
+                        end
+                        2'b01: begin
+                            mem_wr_data[15:8]  = WriteDataM[7:0]; 
+                            mem_we             = 4'b0010;
+                        end
+                        2'b10: begin
+                            mem_wr_data[23:16] = WriteDataM[7:0];
+                            mem_we             = 4'b0100;
+                        end
+                        2'b11: begin
+                            mem_wr_data[31:24] = WriteDataM[7:0];
+                            mem_we             = 4'b1000;
+                        end
+                        default: mem_we = 4'b0000;      // wrong alignment, block write
                     endcase
                 end
                 default: mem_we = 4'b0000;
