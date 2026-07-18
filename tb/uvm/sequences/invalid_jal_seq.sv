@@ -23,7 +23,7 @@ class invalid_jal_seq extends base_seq;
     virtual task generate_program();
         foreach (imm_list[i]) begin
             instr_seq_item item = instr_seq_item::type_id::create("item");
-            item.pc_must_align.constraint_mode(0); // turn of PC alignment constraint
+            item.pc_must_align.constraint_mode(0); // turn off PC alignment constraint
 
             if (!item.randomize() with {
                 instruction == JAL;

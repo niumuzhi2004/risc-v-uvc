@@ -7,7 +7,7 @@ class base_seq extends uvm_sequence #(instr_seq_item);
     constraint program_length {
         // program needs to have at least 20 instructions to 
         // have a moderate chance at covering all instruction types
-        program_size inside {[40:62]};
+        program_size inside {[50:62]};
     }
 
     function new(string name = "base_seq");
