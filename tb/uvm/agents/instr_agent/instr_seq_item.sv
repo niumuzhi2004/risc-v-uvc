@@ -65,13 +65,17 @@ class instr_seq_item extends uvm_sequence_item;
 
     // coverage-driven constraint on immediate
     constraint imm_dist {
+        solve instruction before bucket;
+        solve bucket before imm;
+        
         if (instruction inside {ADDI, SLTI, SLTIU}) {
-            bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1, 4 := 1 };
+            bucket dist { 0 := 1, 1 := 1, 2 := 1, 3 := 1, 4 := 1, 5 := 1 };
             bucket == 0 -> imm[11:0] == 12'h7FF;
             bucket == 1 -> imm[11:0] inside {[12'h001:12'h7FE]};
             bucket == 2 -> imm[11:0] == 12'h000;
-            bucket == 3 -> imm[11:0] inside {[12'h801:12'hFFF]};
+            bucket == 3 -> imm[11:0] inside {[12'h801:12'hFFE]};
             bucket == 4 -> imm[11:0] == 12'h800;
+            bucket == 5 -> imm[11:0] == 12'hFFF;
         } 
         else if (instruction inside {SLLI, SRLI, SRAI}) {
             bucket dist { 0 := 1, 1 := 1, 2 := 1 };
@@ -110,12 +114,14 @@ class instr_seq_item extends uvm_sequence_item;
 
     // coverage-driven constraint on rd
     constraint rd_dist {
-        if (!instruction inside {SB, SH, SW, BEQ, BNE, BLT, BGE, BLTU, BGEU})
+        solve instruction before rd;
+        if ( !(instruction inside {SB, SH, SW, BEQ, BNE, BLT, BGE, BLTU, BGEU}) ) {
             rd dist { 0 := 1, [1:31] :/ 3 };
+        }
     }
 
     // coverage-driven constraint on PC alignment for branch and jump instructions
-    constraint pc_align {
+    constraint pc_must_align {
         if (instruction inside {BEQ, BNE, BLT, BGE, BLTU, BGEU, JALR}) {
             imm[1:0] == 2'b00;
         }

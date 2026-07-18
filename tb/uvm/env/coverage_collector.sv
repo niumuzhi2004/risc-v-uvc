@@ -396,7 +396,25 @@ class coverage_collector extends uvm_component;
             bins not_x0 = { [5'd1:5'd31] };
         }
 
-        cp_rs1_rs2_stages: cross cp_rs1_stage, cp_rs2_stage, cp_rs1, cp_rs2;
+        cp_rs1_rs2_stages: cross cp_rs1_stage, cp_rs2_stage, cp_rs1, cp_rs2 {
+            // impossible to reach: rs1 and rs2 must have the same stage because they come from the same instruction
+            illegal_bins rs1_rs2_diff_stage_1 = 
+                binsof(cp_rs1_stage.match_rd_mem) && binsof(cp_rs2_stage.match_rd_wb);
+            
+            illegal_bins rs1_rs2_diff_stage_2 = 
+                binsof(cp_rs1_stage.match_rd_wb) && binsof(cp_rs2_stage.match_rd_mem);
+
+            // impossible to reach: if both rs1 and rs2 do not match, that's not a real hazard
+            illegal_bins both_do_not_match = 
+                binsof(cp_rs1_stage.do_not_match) && binsof(cp_rs2_stage.do_not_match);
+
+            // matching x0 is not a real hazard
+            ignore_bins rs1_match_x0 = 
+                binsof(cp_rs1.is_x0) && (binsof(cp_rs1_stage.match_rd_mem) || binsof(cp_rs1_stage.match_rd_wb));
+
+            ignore_bins rs2_match_x0 = 
+                binsof(cp_rs2.is_x0) && (binsof(cp_rs2_stage.match_rd_mem) || binsof(cp_rs2_stage.match_rd_wb));
+        }
 
         cp_rd_prev: coverpoint rd_prev {
             bins is_x0  = { 5'd0 };
