@@ -32,6 +32,16 @@ module tb_top();
         .Valid(debug_if_inst.Valid)
     );
 
+    bind processor processor_sva u_sva (
+        .clk(clk),
+        .rst_n(instr_if_inst.rst_n),
+        .mem_re(dut.mem_re),
+        .mem_we(dut.mem_we),
+        .Halt(dut.Halt),
+        .Valid(dut.Valid),
+        .DebugRegFile(dut.DebugRegFile)
+    );
+
     initial begin
         // set initial values
         instr_if_inst.RD    = 0;
