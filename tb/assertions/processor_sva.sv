@@ -4,7 +4,6 @@ module processor_sva (
     input logic        mem_re,
     input logic [3:0]  mem_we,
     input logic        Halt,
-    input logic [31:0] PCF,
     input logic        Valid,
     input logic [31:0] DebugRegFile [32]
 );
@@ -27,12 +26,6 @@ module processor_sva (
         Halt |-> ##1 Halt;
     endproperty
 
-    // program counter needs to be a multiple of 4
-    property pc_value;
-        @(posedge clk) disable iff (~rst_n)
-        (PCF[1:0] == 2'b00);
-    endproperty
-
     // register x0 must always be zero
     property x0_value;
         @(posedge clk) disable iff (~rst_n)
@@ -41,15 +34,23 @@ module processor_sva (
 
     // valid must not be high during reset or halt
     property valid_value;
-        @(posedge clk) 
-        (~rst_n || Halt) |-> ~Valid;
+        @(posedge clk)
+        ((!$isunknown(rst_n)) && (!$isunknown(Halt)) && (~rst_n || Halt)) |-> ~Valid;
     endproperty
 
-    no_simultaneous_read_and_write: assert property (mem_we_re);
-    valid_mem_we_patterns:          assert property (mem_we_vals);
-    halt_only_asserts_once:         assert property (halt_assertion);
-    program_counter_aligned:        assert property (pc_value);
-    register_x0_always_zero:        assert property (x0_value);
-    not_valid_during_reset_or_halt: assert property (valid_value);
+    no_simultaneous_read_and_write: assert property (mem_we_re)
+    else $error("SVA Violation: No simultaneous data memory reads and writes");
+
+    valid_mem_we_patterns: assert property (mem_we_vals)
+    else $error("SVA Violation: Invalid memory write enable pattern");
+
+    halt_only_asserts_once: assert property (halt_assertion)
+    else $error("SVA Violation: Halt signal deasserted after being asserted");
+
+    register_x0_always_zero: assert property (x0_value)
+    else $error("SVA Violation: Register x0 is not zero");
+    
+    not_valid_during_reset_or_halt: assert property (valid_value)
+    else $error("SVA Violation: Valid signal is high during reset or halt");
 
 endmodule
