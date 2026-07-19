@@ -334,13 +334,14 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="3">RTYPE-05</td>
     <td rowspan="3">Instructions xor, or, and perform bitwise logical operations between rs1 and rs2</td>
     <td>RTYPE-05-A: rs1 is 32'hFFFF_FFFF/32'h0000_0000/in between</td>
-    <td rowspan="3">Constrained Random</td>
+    <td rowspan="2">Constrained Random</td>
     </tr>
     <tr>
     <td>RTYPE-05-B: rs2 is 32'hFFFF_FFFF/32'h0000_0000/in between</td>
     </tr>
     <tr>
     <td>RTYPE-05-C: rs1_val cross rs2_val</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td rowspan="2">RTYPE-06</td>
@@ -549,10 +550,11 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="2">JTYPE-02</td>
     <td rowspan="2">Processor should not write if register rd is x0 but should write normally otherwise</td>
     <td>JTYPE-02-A: register rd is x0</td>
-    <td rowspan="2">Constrained Random</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td>JTYPE-02-B: register rd is x1-x31</td>
+    <td rowspan="1">Constrained Random</td>
     </tr>
     <tr>
     <td rowspan="2">JTYPE-03</td>
@@ -568,7 +570,7 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     <td rowspan="7">HAZARD-01</td>
     <td rowspan="7">A read-after-write (RAW) hazard would occur if the next instruction reads the register that the previous instruction wrote to. Processor should handle RAW hazard via forwarding</td>
     <td>HAZARD-01-A: rs1 in EX matches Rd in MEM/WB</td>
-    <td rowspan="7">Constrained Random</td>
+    <td rowspan="4">Constrained Random</td>
     </tr>
     <tr>
     <td>HAZARD-01-B: rs2 in EX matches Rd in MEM/WB</td>
@@ -581,9 +583,11 @@ The verification plan relies on the Universal Verification Methodology (UVM) fra
     </tr>
     <tr>
     <td>HAZARD-01-E: rs1_stage cross rs2_stage, rs1_isx0, rs2_isx0</td>
+    <td rowspan="1">Directed Testing</td>
     </tr>
     <tr>
     <td>HAZARD-01-F: Rd in MEM/WB is x0, rs1 in EX is also x0</td>
+    <td rowspan="2">Constrained Random</td>
     </tr>
     <tr>
     <td>HAZARD-01-G: Rd in MEM/WB is x0, rs2 in EX is also x0</td>
@@ -686,4 +690,4 @@ For the Excel version of the feature coverage plan, please refer to [the attache
 
 ## Regression Plan
 
-The regression consists of 100 constrained-random tests each with a different seed. The criteria for closure is that (1) 100% functional coverage bins are hit, and (2) 100% scoreboard pass rate across all regression seeds. 
+The regression consists of 150 constrained-random tests with different seeds along with directed tests. The criteria for closure is that (1) 100% functional coverage bins are hit, and (2) 100% scoreboard pass rate across all regression seeds. 

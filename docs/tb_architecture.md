@@ -65,13 +65,15 @@ The following sequences are designed to generate test programs that cover the fe
 
 | Sequence | Type | Program Length | Description |
 |----------|------|----------------|-------------|
-| `constrained_random_seq` | Constrained Random | 20-62 | Generates a random program that aims to broadly cover all instruction types |
+| `constrained_random_seq` | Constrained Random | 50-62 | Generates a random program that aims to broadly cover all instruction types |
+| `rand_without_jump_seq` | Constrained Random | 50-62 | `constrained_random_seq` excluding branch and jump instructions |
 | `addr_alignment_seq` | Directed Testing | 16 | Tests address alignment when loading or storing byte or half values (`LOAD-04`, `STYPE-04`) |
-| `consecutive_hazards_seq` | Directed Testing | 20 | Tests back-to-back RAW, load stall, and jump/branch hazards (`HAZARD-04`) |
-| `invalid_branch_seq` | Directed Testing | 3 | Tests branch instructions with invalid PC targets (`BTYPE-03`) |
-| `invalid_jal_seq` | Directed Testing | 3 | Tests `JAL` instructions with invalid PC targets (`JTYPE-01`) |
-| `invalid_jalr_seq` | Directed Testing | 3 | Tests `JALR` instructions with invalid PC targets (`JALR-01`) |
+| `consecutive_hazards_seq` | Directed Testing | 21 | Tests back-to-back RAW, load stall, and jump/branch hazards (`HAZARD-04`) |
+| `invalid_branch_seq` | Directed Testing | 4 | Tests branch instructions with invalid PC targets (`BTYPE-03`, `BTYPE-04`) |
+| `invalid_jal_seq` | Directed Testing | 5 | Tests `JAL` instructions with invalid PC targets (`JTYPE-01`, `JTYPE-03`) |
+| `invalid_jalr_seq` | Directed Testing | 6 | Tests `JALR` instructions with invalid PC targets (`JALR-01`, `JALR-03`) |
+| `directed_testing_seq` | Directed Testing | 10 | Directed testing sequence covering hard-to-hit coverage bins |
 
-In the constrained random sequence, to avoid infinite loops as much as possible, we tuned the probability of generating forward branches and jumps to 80%, and backward branches and jumps to 20%. The minimum number of instructions in a program is set to 20, which yields a moderate chance of covering all instruction types. 
+In the constrained random sequence, the first 31 instructions fill registers `x1`-`x31` with immediate values using `ADDI` and `LUI` instructions. To avoid infinite loops as much as possible, we tuned the probability of generating forward branches and jumps to 90%, and backward branches and jumps to 10%. The minimum number of instructions in a program is set to 50, which yields a moderate chance of covering all instruction types. 
 
 A test is generated for each sequence. A watchdog timer is implemented to terminate the simulation in case of an infinite loop. 
