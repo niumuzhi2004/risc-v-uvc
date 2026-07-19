@@ -75,8 +75,14 @@ The verification plan includes a comprehensive set of directed and constrained-r
     - **Scoreboard**: Compares DUT outputs with expected results
     - **Coverage Collector**: functional covergroups reflecting [Feature Coverage Plan](./docs/verification_plan.md#feature-coverage-plan)
     - **ISS**: SystemVerilog Instruction Set Simulator as reference model
-- **Sequences** - 1 constrained random and 5 directed sequences to cover instructions and hazards
-- **Tests** - 6 tests mapping to the sequences above
+- **Sequences** - 2 constrained random and 6 directed sequences to cover instructions and hazards
+    - **Constrained Random Sequence** - generates random instructions
+    - **Random Without Jumps Sequence** - excludes jump and branch instructions
+    - **Address Alignment Sequence** - tests aligned and unaligned memory accesses
+    - **Consecutive Hazards Sequence** - tests back-to-back hazard scenarios
+    - **Invalid Branch/JAL/JALR Sequence** - tests invalid branch, `JAL`, and `JALR` instructions
+    - **Directed Testing Sequence** - covers hard-to-hit coverage bins
+- **Tests** - 8 tests mapping to the sequences above
 
 More on the testbench architecture can be found in the [Testbench Architecture](./docs/tb_architecture.md).
 
@@ -88,13 +94,20 @@ The testbench includes a set of SystemVerilog Assertions (SVA) to ensure several
 1. No simultaneous read and write to the data memory.
 2. Valid byte enable combinations for `SB`, `SH`, and `SW`.
 3. Halt never deasserts once asserted, unless during reset.
-4. PCF is always aligned to 4 bytes.
-5. Register `x0` is always zero.
-6. Valid must not be asserted during reset or halt.
-
+4. Register `x0` is always zero.
+5. Valid must not be asserted during reset or halt.
 
 ## Results
 
+`constrained_random_test` is run for 100 seeds, and `rand_without_jump_test` is run for 50 seeds. The directed tests are each run once. The simulation results are summarized below:
+
+| Result | Status |
+|--------|--------|
+| Total Instructions Run | 10307 |
+| Functional Coverage | 100% |
+| Scoreboard Pass Rate | 100% |
+| `UVM_ERROR` Count | 0 |
+| Assertion Violations | 0 |
 
 ## Requirements
 | Tool | Version |
@@ -102,6 +115,16 @@ The testbench includes a set of SystemVerilog Assertions (SVA) to ensure several
 | Xilinx Vivado | XSIM v2025.2 |
 | UVM | UVM 1.2 (within Vivado) |
 
+## Repo Structure
+- `docs/` - Documentation for DUT specs, testbench architecture, and verification plan
+- `rtl/` - RTL source files for the RISC-V pipelined processor
+- `sim/` - Simulation scripts
+    - `sim/smoke/` - tcl simulation scripts for smoke test
+    - `sim/uvm/` - tcl & Python simulation scripts for UVM testbench
+- `tb/` - UVM testbench source files
+    - `tb/assertions/` - SystemVerilog assertions
+    - `tb/smoke/` - Smoke test testbench files
+    - `tb/uvm/` - UVM testbench files
 
 ## How to Run
 ### Running the smoke test
@@ -114,7 +137,7 @@ vivado -mode batch -source ./smoke/run.tcl
 ### Running the UVM testbench
 ```cmd
 cd sim
-vivado -mode batch -source ./uvm/run.tcl
+python ./uvm/regression.py
 ```
 
 > Coverage report generated at `sim/coverage_report/functionalCoverageReport/dashboard.html`
