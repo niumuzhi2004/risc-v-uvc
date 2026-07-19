@@ -115,7 +115,10 @@ class instr_seq_item extends uvm_sequence_item;
     // coverage-driven constraint on rd
     constraint rd_dist {
         solve instruction before rd;
-        if ( !(instruction inside {SB, SH, SW, BEQ, BNE, BLT, BGE, BLTU, BGEU}) ) {
+        if (instruction inside {JAL, JALR}) {
+            rd dist { 0 := 1, [1:31] :/ 1 };
+        }
+        else if ( !(instruction inside {SB, SH, SW, BEQ, BNE, BLT, BGE, BLTU, BGEU}) ) {
             rd dist { 0 := 1, [1:31] :/ 3 };
         }
     }
