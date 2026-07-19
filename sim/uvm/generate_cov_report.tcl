@@ -7,6 +7,6 @@ foreach arg $argv {
 exec xcrg {*}$cov_db_names \
           -cov_db_dir ./cov_db \
           -report_format html \
-          -report_dir coverage_report \
+          -report_dir coverage_report
 
 exit

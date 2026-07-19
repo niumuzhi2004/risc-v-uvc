@@ -16,7 +16,8 @@ exec xsim tb_top_snapshot \
     -cov_db_name $cov \
     -cov_db_dir ./cov_db \
     -runall \
-    -gui -tclbatch ./smoke/wave.tcl \
     -log ${test}_${seed}.log
+
+# to enable GUI waveform checking, add -gui -tclbatch ./smoke/wave.tcl
 
 exit

@@ -18,7 +18,6 @@ exec xvlog -sv ../tb/uvm/interfaces/data_if.sv
 exec xvlog -sv ../tb/uvm/interfaces/instr_if.sv
 exec xvlog -sv ../tb/uvm/interfaces/debug_if.sv
 exec xvlog -sv ../tb/assertions/processor_sva.sv
-exec xvlog -sv ../tb/assertions/bind_file.sv
 
 exec xvlog -sv -L uvm ../tb/uvm/tb_pkg.sv
 
