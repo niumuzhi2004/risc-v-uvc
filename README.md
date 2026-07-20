@@ -15,7 +15,7 @@ This project implements a simple **UVM (Universal Verification Methodology) veri
 | Pipeline Depth | 5-stage (fetch, decode, execute, memory, and writeback) |
 | Hazard Handling | Full forwarding + stall on load-use hazards |
 | Instruction Set Architecture (ISA) | RV32I subset (excluding `FENCE`, `ECALL`, and `EBREAK`) |
-| Memory | Synchronous SRAMs in RTL ||
+| Memory | Simulated in testbench |
 | Reset | Synchronous, active-low |
 | Debug status flags | `Halt`, `Instr`, `PC`, `Valid`, `DebugRegFile` (32 register `x0`-`x31` exposed) |
 
@@ -58,7 +58,7 @@ The test is translated into machine code and terminated by the `Halt` signal tri
 | x9 | `0x000000FF` | Line 8: `xor` |
 
 ## Verification Plan
-The verification plan includes a comprehensive set of directed and constrained-random tests to cover all supported instructions, hazard scenarios, and pipeline behaviors. More details can be found in the [Verification Plan](./docs/verification_plan.md).
+The verification plan includes a comprehensive set of directed and constrained-random tests to cover all supported instructions, hazard scenarios, and pipeline behaviors. The specific feature coverage plan can be found in the [Verification Plan](./docs/verification_plan.md). Sign-off criteria is defined as covering 100% of the functional coverage items and passing all tests without any assertion violations. 
 
 ## Testbench Architecture
 <p align="center">
@@ -103,11 +103,13 @@ The testbench includes a set of SystemVerilog Assertions (SVA) to ensure several
 
 | Result | Status |
 |--------|--------|
-| Total Instructions Run | 10307 |
-| Functional Coverage | 100% |
+| Total Instructions Run | 10308 |
+| Functional Coverage * | 100% |
 | Scoreboard Pass Rate | 100% |
 | `UVM_ERROR` Count | 0 |
 | Assertion Violations | 0 |
+
+> *Functional coverage is measured by the covergroups defined in the UVM testbench.
 
 ## Requirements
 | Tool | Version |

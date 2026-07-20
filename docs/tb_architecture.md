@@ -49,7 +49,7 @@ The coverage collector specifies the functional coverage groups and bins listed 
 
 ### Instruction Set Simulator (ISS)
 
-A SystemVerilog instruction set simulator (ISS) acts as a reference model and generates expected results of instructions execution. It receives the instruction from the debug monitor via `uvm_analysis_imp`, simulates the instruction, and sends the resulting register file values and program counter value to the scoreboard via `uvm_analysis_port`. To execute the load and branch/jump instructions, it keeps an internal copy of the data and instruction memories.
+A SystemVerilog instruction set simulator (ISS) acts as a reference model and generates expected results of instructions execution. It receives the instruction from the debug monitor via `uvm_analysis_imp`, simulates the instruction, and sends the resulting register file values and program counter value to the scoreboard via `uvm_analysis_port`. To execute the load and branch/jump instructions, it keeps an internal copy of the data memory.
 
 ### Scoreboard
 
