@@ -30,15 +30,15 @@ class directed_testing_seq extends base_seq;
 
     virtual task generate_program();
 
-        instr_seq_item item1 = instr_seq_item::type_id::create("item1");
-        instr_seq_item item2 = instr_seq_item::type_id::create("item2");
-        instr_seq_item item3 = instr_seq_item::type_id::create("item3");
-        instr_seq_item item4 = instr_seq_item::type_id::create("item4");
-        instr_seq_item item5 = instr_seq_item::type_id::create("item5");
-        instr_seq_item item6 = instr_seq_item::type_id::create("item6");
-        instr_seq_item item7 = instr_seq_item::type_id::create("item7");
-        instr_seq_item item8 = instr_seq_item::type_id::create("item8");
-        instr_seq_item item9 = instr_seq_item::type_id::create("item9");
+        instr_seq_item item1  = instr_seq_item::type_id::create("item1");
+        instr_seq_item item2  = instr_seq_item::type_id::create("item2");
+        instr_seq_item item3  = instr_seq_item::type_id::create("item3");
+        instr_seq_item item4  = instr_seq_item::type_id::create("item4");
+        instr_seq_item item5  = instr_seq_item::type_id::create("item5");
+        instr_seq_item item6  = instr_seq_item::type_id::create("item6");
+        instr_seq_item item7  = instr_seq_item::type_id::create("item7");
+        instr_seq_item item8  = instr_seq_item::type_id::create("item8");
+        instr_seq_item item9  = instr_seq_item::type_id::create("item9");
         instr_seq_item item10 = instr_seq_item::type_id::create("item10");
 
         // Instruction 1: ADDI x1, x0, 0xFFF
@@ -81,7 +81,7 @@ class directed_testing_seq extends base_seq;
         if (!item4.randomize() with {
             instruction == JAL;
             rd          == 5'd0;
-            imm         == 20'd4;
+            imm         == 20'd2;
         }) begin
             `uvm_error("Body", "Randomization failed!")
         end
